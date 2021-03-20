@@ -1,128 +1,97 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from '../store'
+import Home from '../views/Home.vue'
+import Archive from '../views/Archive.vue'
+import Article from '../views/Article.vue'
+import BlogsByParams from '../components/BlogsByTagCate.vue'
+import friends from '../views/Friends.vue'
+import about from '../views/About.vue'
+import Moment from '../views/Moment.vue'
 
-Vue.use(Router);
+Vue.use(VueRouter)
 
-export default new Router({
-    mode: 'history',
-    routes: [
-        {
-            path: '/',
-            redirect: '/sysindex'
-        },
-        {
-            path: '/',
-            component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-            meta: { title: '自述文件', requireAuth: true },
-            children: [
-                {
-                    path: '/sysindex',
-                    name:'sysindex',
-                    component: () => import(/* webpackChunkName: "SysIndex" */ '../components/page/SysIndex.vue'),
-                    meta: { title: '系统首页', requireAuth: true }
-                },
-                {
-                    path: '/friendlist',
-                    name:'friendlist',
-                    component: () => import(/* webpackChunkName: "friendlist" */ '../components/page/FriendList.vue'),
-                    meta: { title: '友情链接', requireAuth: true  }
-                },
-                {
-                    path: '/articles',
-                    name:'articles',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/Articles.vue'),
-                    meta: { title: '文章列表', requireAuth: true  }
-                },
-                {
-                    // BlogEdit
-                    path: '/BlogEdit/:blog_id',
-                    name:'BlogEdit',
-                    component: () => import(/* webpackChunkName: "BlogEdit" */ '../components/page/BlogEdit.vue'),
-                    meta: { title: '文章编辑', requireAuth: true  }
-                },
-                {
-                    // BlogEdit
-                    path: '/BlogEdit',
-                    name:'BlogRealse',
-                    component: () => import(/* webpackChunkName: "BlogEdit" */ '../components/page/BlogEdit.vue'),
-                    meta: { title: '文章编写', requireAuth: true  }
-                },
-                {
-                    path: '/blogtag',
-                    name:'blogtag',
-                    component: () => import(/* webpackChunkName: "blogtag" */ '../components/page/BlogTag.vue'),
-                    meta: { title: '标签目录', requireAuth: true  }
-                },
-                {
-                    path: '/category',
-                    name:'category',
-                    component: () => import(/* webpackChunkName: "category" */ '../components/page/CateGory.vue'),
-                    meta: { title: '分类目录', requireAuth: true  }
-                },
-                {
-                    path: '/comments',
-                    name:'comments',
-                    component: () => import(/* webpackChunkName: "category" */ '../components/page/Comments.vue'),
-                    meta: { title: '评论管理', requireAuth: true  }
-                },
-                {
-                    path: '/moment',
-                    name:'moment',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/Moment.vue'),
-                    meta: { title: '动态列表', requireAuth: true  }
-                },
-                {
-                    path:'/joblogs',
-                    name:'joblogs',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/log/Joblogs.vue'),
-                    meta: { title: '任务日志', requireAuth: true  }
-                },
-                {
-                    path:'/loginlogs',
-                    name:'loginlogs',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/log/Loginlogs.vue'),
-                    meta: { title: '登录日志', requireAuth: true  }
-                },
-                {
-                    path:'/operationlogs',
-                    name:'operationlogs',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/log/Operationlogs.vue'),
-                    meta: { title: '操作日志', requireAuth: true  }
-                },
-                {
-                    path:'/errorlogs',
-                    name:'errorlogs',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/log/Errorlogs.vue'),
-                    meta: { title: '异常日志', requireAuth: true  }
-                },
-                {
-                    path:'/vistorlogs',
-                    name:'vistorlogs',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/log/Vistorlogs.vue'),
-                    meta: { title: '访问日志', requireAuth: true  }
-                },
-                {
-                    path:'/SiteSetting',
-                    name:'SiteSetting',
-                    component: () => import(/* webpackChunkName: "articles" */ '../components/page/SiteSetting.vue'),
-                    meta: { title: '站点设置', requireAuth: true  }
-                },
-                {
-                    path: '/404',
-                    name:'404',
-                    component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
-                    meta: { title: '404' , requireAuth: true }
-                }
-            ]
-        },
-        {
-            path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
-            meta: { title: '登录' }
-        },
-        {
-            path: '*',
-            redirect: '/404'
-        }
-    ]
-});
+const routes = [
+  {
+    path: '/',
+    component: Home,
+    meta: {
+      title: '首页'
+    }
+  },
+  {
+    path: '/Home',
+    name: 'Home',
+    component: Home,
+    meta: {
+      title: '首页'
+    }
+  },
+  {
+    path: '/archive',
+    name: 'archive',
+    component: Archive,
+    meta: {
+      title: '归档'
+    }
+  },
+  {
+    path: '/moment',
+    name: 'moment',
+    component: Moment,
+    meta: {
+      title: '动态说说'
+    }
+  },
+  {
+    path: '/article/:blogId',
+    name: 'article',
+    component: Article,
+    meta: {
+      title: '文章'
+    }
+  },
+  {
+    path: '/list/:type/:id',
+    name: 'list',
+    component: BlogsByParams,
+    meta: {
+      title: '文章'
+    }
+  },
+  {
+    path: '/friends',
+    name: 'friends',
+    component: friends,
+    meta: {
+      title: '友情链接'
+    }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: about,
+    meta: {
+      title: '关于我'
+    }
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+
+//挂载路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    if (store.state.siteInfo.webTitleSuffix) {
+      document.title = to.meta.title + store.state.siteInfo.webTitleSuffix
+    } else {
+      document.title = to.meta.title
+    }
+  }
+  next()
+})
+export default router

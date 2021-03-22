@@ -2,8 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
-// import './assets/css/theme-green/index.css'; // 浅绿色主题
+// import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
+import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';

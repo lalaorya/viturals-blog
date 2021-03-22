@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ArticleService {
     // 获取所有博文
-    List<Article> selectList(Wrapper<Article> queryWrapper);
+    List<Article> selectList();
 }

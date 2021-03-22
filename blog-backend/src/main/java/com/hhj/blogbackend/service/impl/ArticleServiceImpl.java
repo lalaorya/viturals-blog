@@ -14,8 +14,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     ArticleMapper mapper;
     @Override
-    public List<Article> selectList(Wrapper<Article> queryWrapper) {
-        List<Article> articles = mapper.selectList(queryWrapper);
+    public List<Article> selectList() {
+        List<Article> articles = mapper.selectList(null);
         return articles;
     }
 }

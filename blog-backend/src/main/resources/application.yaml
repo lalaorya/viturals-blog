@@ -41,9 +41,25 @@ spring:
 # 配置mybatis-plus
 mybatis-plus:
   mapper-locations: "classpath*:/mapper/**/*.xml"
-
-
   configuration:
     # 是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN（下划线命名） 到经典 Java 属性名 aColumn（驼峰命名） 的类似映射
     map-underscore-to-camel-case: false
+  type-aliases-package: com.hhj.blogbackend.pojo
 
+shiro-redis:
+  enabled: true
+  redis-manager:
+    host: 127.0.0.1:6379
+#token配置
+blog:
+  jwt:
+    # 加密秘钥
+    secret: zrf5202e34348f86b67cde581c0f9eb5
+    # token有效时长，7天，单位秒
+    expire: 604800
+    header: token
+#
+#shiro-redis:
+#  enabled: true
+#  redis-manager:
+#    host:127.0.0.1:6379

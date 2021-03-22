@@ -6,13 +6,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.hhj.blogbackend")
 public class BlogBackendApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(BlogBackendApplication.class, args);
-        DataSource bean = run.getBean(DataSource.class);
-        System.out.println(bean.getClass());
+        SpringApplication.run(BlogBackendApplication.class, args);
+
     }
 
 }

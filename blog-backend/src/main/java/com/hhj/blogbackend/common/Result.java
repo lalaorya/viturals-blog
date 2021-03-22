@@ -14,6 +14,7 @@ public class Result implements Serializable {
     int code;
     String msg;
     Object data;
+    // 错误只有200和400
 
     //    成功
     public static Result success(int code, String msg, Object data) {
@@ -34,11 +35,11 @@ public class Result implements Serializable {
     }
 
     public static Result fail(String msg, Object data) {
-        return new Result(404, msg, data);
+        return new Result(400, msg, data);
     }
 
     public static Result fail(String message) {
-        return new Result(404, message, null);
+        return new Result(400, message, null);
     }
 
 

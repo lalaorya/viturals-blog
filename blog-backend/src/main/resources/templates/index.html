@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#button1").click(function(){
+                // get方式的语法
+                // $(selector).get(url,data,success(response,status,xhr),dataType)
+                $.get("http://localhost:8050/article/list",function(){
+                    alert("get方式搞定")
+                },"text")
+            })
+
+        })
+    </script>
+
+    <title>jq实现ajax</title>
 </head>
+
 <body>
+<input id="button1" type="button" value="异步ajax">
 
 </body>
+
 </html>

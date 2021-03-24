@@ -58,7 +58,10 @@ public class UserRealm extends AuthorizingRealm {
         User user = userService.getUserById(Integer.parseInt(userId));
         System.out.println(user.toString());
 
-        if(user==null)  throw new UnknownAccountException("账号或密码错误");
+        if(user==null){
+            log.info("认证失败");
+            throw new UnknownAccountException("认证失败");
+        }
 
         MyProfile myPorfile = new MyProfile();
         BeanUtil.copyProperties(user,myPorfile);

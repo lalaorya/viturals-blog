@@ -3,6 +3,8 @@ package com.hhj.blogbackend.exception;
 import com.hhj.blogbackend.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -63,6 +65,20 @@ public class AllExceptionHandler {
     @ExceptionHandler(value = UnauthenticatedException.class)
     public Result handler(UnauthenticatedException  e) {
         log.error("====================认证异常：{}", e.getMessage());
+        return Result.fail(401,e.getMessage(),null);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = UnknownAccountException.class)
+    public Result handler(UnknownAccountException  e) {
+        log.error("====================token认证异常：{}", e.getMessage());
+        return Result.fail(401,e.getMessage(),null);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = ExpiredCredentialsException.class)
+    public Result handler(ExpiredCredentialsException  e) {
+        log.error("====================token已失效：{}", e);
         return Result.fail(401,e.getMessage(),null);
     }
 

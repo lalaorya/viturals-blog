@@ -52,7 +52,7 @@ public class JwtFilter extends AuthenticatingFilter {
         }
         // 校验jwt
         Claims claimByToken = jwtUtils.getClaimByToken(jwt);
-        if(claimByToken==null||jwtUtils.isTokenExpired(claimByToken.getExpiration())){
+        if(claimByToken==null || jwtUtils.isTokenExpired(claimByToken.getExpiration())){
             throw new ExpiredCredentialsException("token已失效，重新登陆");
         }
 
@@ -76,6 +76,7 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
 
+    // 后置处理
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
 

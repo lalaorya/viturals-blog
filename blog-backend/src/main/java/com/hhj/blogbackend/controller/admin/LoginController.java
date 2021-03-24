@@ -1,4 +1,4 @@
-package com.hhj.blogbackend.controller;
+package com.hhj.blogbackend.controller.admin;
 
 import com.hhj.blogbackend.common.Result;
 import com.hhj.blogbackend.pojo.User;
@@ -63,7 +63,6 @@ public class LoginController {
         map.put("introduction",user.getIntroduction());
         map.put("role",user.getRole());
         return Result.success(map);
-
     }
 
     @ApiOperation("注销用户")

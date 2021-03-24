@@ -37,13 +37,26 @@ spring:
         url-pattern: /*
         exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
 
+# 日志配置
+logging:
+  level:
+    com.hhj.blogbackend.mapper: debug # 设置指定包的日志级别（未指定的包按照root的日志级别执行）
+    root: info  # 定义项目日志级别（默认是info）
+  file:
+    path: /springboot/log # 配置日志输出到当前项目所在磁盘根路径下的/springboot/log目录下（也可以使用绝对路径）
+    name: springboot-blog.log
+  pattern:
+#    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} >>> [%thread] >>> %-5level >>> %logger{50} >>> %msg%n'
+
+
+
 
 # 配置mybatis-plus
 mybatis-plus:
   mapper-locations: "classpath*:/mapper/**/*.xml"
   configuration:
     # 是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN（下划线命名） 到经典 Java 属性名 aColumn（驼峰命名） 的类似映射
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
   type-aliases-package: com.hhj.blogbackend.pojo
 
 shiro-redis:

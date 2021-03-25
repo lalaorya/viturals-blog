@@ -31,12 +31,14 @@ public class Article {
     int top;
     int articleStatus;
 
-    /**
-     * 并非表中字段
-     */
-
-    @TableField(exist = false)
-    ArrayList<String> categorys;
-    @TableField(exist = false)
-    ArrayList<String> tags;
+    // 在dto中新建了数据传输对象，不能用dao对象传，不规范感觉
+//
+//    /**
+//     * 并非表中字段
+//     */
+//
+//    @TableField(exist = false)
+//    ArrayList<String> categorys;
+//    @TableField(exist = false)
+//    ArrayList<String> tags;
 }

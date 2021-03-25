@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hhj.blogbackend.pojo.Tag;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,5 +12,7 @@ import java.util.List;
 public interface TagMapper extends BaseMapper<Tag> {
 
     @Override
-    List<Tag> selectList(Wrapper<Tag> queryWrapper);
+    List<Tag> selectList(@Param("ew") Wrapper<Tag> queryWrapper);
+
+
 }

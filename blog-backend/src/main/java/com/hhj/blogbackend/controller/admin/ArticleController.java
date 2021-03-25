@@ -2,6 +2,7 @@ package com.hhj.blogbackend.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hhj.blogbackend.common.Result;
+import com.hhj.blogbackend.dto.ArticleDetail;
 import com.hhj.blogbackend.pojo.Article;
 import com.hhj.blogbackend.service.ArticleService;
 import com.hhj.blogbackend.service.CategoryService;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,8 +73,10 @@ public class ArticleController {
     @ApiOperation("删除文章")
     public Result deleteById(@RequestParam("id")Integer index){
         int i = service.deleteById(index);
-        log.info("删除文章表中id为{}的文章",index);
-        if(i==1)    return Result.success(200,"删除成功",null);
+        if(i==1){
+            log.info("删除文章表中id为{}的文章",index);
+            return Result.success(200,"删除成功",null);
+        }
         return Result.fail("删除失败,数据库中查无此项");
     }
 
@@ -80,6 +84,8 @@ public class ArticleController {
      * 文章置顶与否
      * 传入文章id index
      * 思路是先根据id查找文章，更新文章status字段，update传入entiy
+     *
+     * 控制层的业务逻辑太多了，不好！！
      */
     @RequiresAuthentication
     @GetMapping("top")
@@ -97,13 +103,22 @@ public class ArticleController {
     }
 
     /**
-     * 根据传入id查询文章
+     * 根据传入id查询文章细节，包含所属标签和分类
      * return：文章基本信息 所属分类标签
      */
-    public Result slectById(@PathVariable(value = "id",required = false)Integer id){
+    @GetMapping("/{id}")
+    @RequiresAuthentication
+    @ApiOperation("根据文章id查询文章细节")
+    public Result slectDetailById(@PathVariable(value = "id",required = false)Integer id){
         if(id==null)    return Result.success(null);
-        Article article = service.selectById(id);
-        tagService.
+        ArticleDetail articleDetail = service.selectDetailById(id);
+
+        if(articleDetail != null){
+            log.info("查询了id为{}的文章的详细信息detail",id);
+            return  Result.success(articleDetail);
+        }
+        return Result.fail("查询失败,请联系管理员");
+
 
 
     }

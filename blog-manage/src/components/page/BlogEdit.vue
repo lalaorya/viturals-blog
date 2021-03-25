@@ -72,12 +72,12 @@
                                 size="small"
                                 @click="showInputTag"
                             >+ New Tag</el-button> -->
-                            <el-select v-model="article.categorys" multiple placeholder="+New Tag" size="mini" filterable="true ">
+                            <el-select v-model="article.tags" multiple placeholder="+New Tag" size="mini" filterable="true ">
                                 <el-option v-for="item in tagsList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="文章目录">
-                            <el-tag
+                        <el-form-item label="文章分类">
+                            <!-- <el-tag
                                 :key="category.category_id"
                                 v-for="category in categorys"
                                 closable
@@ -94,12 +94,16 @@
                                 @keyup.enter.native="handleInputConfirmCategory"
                                 @blur="handleInputConfirmCategory"
                             ></el-input>
-                            <el-button v-else class="button-new-tag" size="small" @click="showInputCategory">+ New Category</el-button>
+                            <el-button v-else class="button-new-tag" size="small" @click="showInputCategory">+ New Category</el-button> -->
+
+                            <el-select v-model="article.categorys" multiple placeholder="+New Tag" size="mini" filterable="true ">
+                                <el-option v-for="item in tagsList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <mavon-editor
-                    v-model="content"
+                    v-model="article.content"
                     ref="md"
                     @imgAdd="$imgAdd"
                     @change="change"
@@ -134,8 +138,10 @@ export default {
                 content: '',
                 publish_time: '',
                 update_time: '',
-                // read_num: '',
+                read_num: 0,
+                like_num:0,
                 picture_url: '',
+                article_status:0,
                 top: 0,
                 categorys: [],
                 tags: []
@@ -144,7 +150,7 @@ export default {
             inputValueTag: '',
             inputVisibleCategory: false,
             inputValueCategory: '',
-            categorys: [],
+            categorysList: [],
             // 所有标签
             tagsList: [],
             fileList: [],
@@ -157,11 +163,35 @@ export default {
     created: function () {
         // 跳转到这个路由页面的时候，判断是否有路径变量blog_id,如果有,查询该id的文章并展示在页面上
         // 这个方法的设计是为了从文章列表的编辑跳转时直接导入文章信息
-        if (this.$route.query.blog_id) {
-            this.getData();
+        if (this.$route.query.blog_id!==null) {
+            this.getBlog();
         }
+        // 获取所有标签和分类信息
+        this.getTagsList();
+        this.getCategorysList();
     },
     methods: {
+        getBlog () {
+            const _this = this;
+            const id = this.$route.query.blog_id;
+            // 这里改成发两次请求比较好，第一次请求查询detail，第二次请求查询list
+            this.$axios.get(`/admin/article/${id}`).then((res) => {
+                _this.article = res.data.data;
+                console.log(_this.article)
+                // _this.content = res.data.data.blog_content;
+                // _this.tagsList = res.data.data.tags;
+                // _this.categorys = res.data.data.cateGory;
+            });
+        },
+        getTagsList() {
+            const _this = this;
+            this.$axios.get(`/admin/blog/${id}`).then((res) => {
+                _this.article = res.data.data;
+                _this.content = res.data.data.blog_content;
+                _this.tagsList = res.data.data.tags;
+                _this.categorys = res.data.data.cateGory;
+            });
+        },
         getData() {
             const _this = this;
             const id = this.$route.query.blog_id;

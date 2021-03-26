@@ -27,13 +27,13 @@
                     :show-overflow-tooltip="true"
                     label="动态"
                 ></el-table-column>
-                <el-table-column prop="likes" label="点赞人数"></el-table-column>
-                <el-table-column property="published" align="center" label="是否发布">
+                <el-table-column prop="likeNum" label="点赞人数"></el-table-column>
+                <el-table-column property="status" align="center" label="是否发布">
                     <template slot-scope="scope">
                         <el-switch
                             :active-value="1"
                             :inactive-value="0"
-                            v-model="scope.row.published"
+                            v-model="scope.row.status"
                             @change="changeStatus(scope.$index,scope.row)"
                         ></el-switch>
                     </template>
@@ -100,7 +100,7 @@ export default {
             momentform: {
                 id: null,
                 content: '',
-                published: 0
+                // published: 0
             },
             momentList: [],
             currentPage: 1,
@@ -119,18 +119,16 @@ export default {
         getData(currentPage) {
             const _this = this;
             this.$axios
-                .get('/admin/AllmomentList', {
+                .get('/admin/moment/list', {
                     params: {
                         currentPage: currentPage
                     },
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
                 })
                 .then(res => {
-                    _this.momentList = res.data.data;
-                    _this.currentPage = res.data.currentPage;
-                    _this.total = res.data.totalPage;
+                    console.log(res);
+                    _this.momentList = res.data.data.records;
+                    _this.currentPage = res.data.data.current;
+                    _this.total = res.data.data.pages;
                 });
         },
         // 触发搜索按钮
@@ -155,19 +153,18 @@ export default {
         },
         // 删除操作
         handleDelete(index, row) {
+            console.log(row.id)
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
             })
                 .then(() => {
                     this.$axios
-                        .delete('/admin/moment/delete', {
-                            params: {
+                        .get('/admin/moment/delete',{
+                            params:{
                                 id: row.id
-                            },
-                            headers: {
-                                Authorization: localStorage.getItem('token')
                             }
+                                
                         })
                         .then(res => {
                             if (res.data.code == 200) {
@@ -195,11 +192,7 @@ export default {
             //修改动态
             if (!_this.isAdd) {
                 this.$axios
-                    .put('/admin/updateMoment', _this.momentform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .put('/admin/moment/update', _this.momentform)
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -212,14 +205,11 @@ export default {
                         this.$message.error('不要再试了哦，没有权限');
                     });
             } else {
-                this.momentform.published = 1;
+                // 默认已经发布
+                // this.momentform.published = 1;
                 //添加动态
                 this.$axios
-                    .post('/admin/saveMoment', _this.momentform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .post('/admin/moment/save', _this.momentform, )
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -249,24 +239,22 @@ export default {
             // render 为 markdown 解析后的结果
             //  this.blogDetail.blog_content=render;
         },
+        // 发布按钮
         changeStatus(index, row) {
             const _this = this;
-            const id = row.id;
-            const isPublish = row.published;
+            const id2 = row.id;
+            const isPublish = row.status;
             const params = {
-                id,
-                isPublish
+                id: id2,
+                status:isPublish
             };
             this.$axios
-                .put('/admin/moment/isPublish', params, {
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
-                })
+                .post('/admin/moment/changeStatus', params)
                 .then(res => {
                     if (res.data.code == 200) {
                         this.$message.success(res.data.msg);
-                        this.reload();
+                        this.reload;
+                        console.log(_this.momentList);
                     } else {
                         this.$message.error(res.data.msg);
                     }

@@ -19,14 +19,16 @@
                                 class="upload-demo"
                                 ref="upload"
                                 action="string"
-                                accept="image/jpeg, image/png, image/jpg"
+                                accept="imgae/jpeg, image/png, image/jpg"
                                 list-type="picture-card"
                                 :before-upload="onBeforeUploadImage"
-                                :http-request="UploadImage"
+                                
                                 :on-change="fileChange"
                                 :file-list="fileList"
                                 :limit="1"
                             >
+                            <!-- 文章上传先不处理，这行本放在上面空行 -->
+                            <!-- :http-request="UploadImage" -->
                                 <el-button size="small" type="primary">点击上传</el-button>
                                 <div slot="tip" class="el-upload__tip">只能上传jpg/jpeg/png文件</div>
                             </el-upload>
@@ -40,7 +42,7 @@
                                     type="datetime"
                                     value-format="yyyy-MM-dd HH:mm:ss"
                                     placeholder="选择日期"
-                                    v-model="article.publish_time"
+                                    v-model="article.publishTime"
                                     style="width: 100%"
                                 ></el-date-picker>
                             </el-col>
@@ -73,7 +75,7 @@
                                 @click="showInputTag"
                             >+ New Tag</el-button> -->
                             <el-select v-model="article.tags" multiple placeholder="+New Tag" size="mini" filterable="true ">
-                                <el-option v-for="item in tagsList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                                <el-option v-for="item in tagsList" :key="item.id" :label="item.name" :value="item.name"> </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="文章分类">
@@ -97,7 +99,7 @@
                             <el-button v-else class="button-new-tag" size="small" @click="showInputCategory">+ New Category</el-button> -->
 
                             <el-select v-model="article.categorys" multiple placeholder="+New Tag" size="mini" filterable="true ">
-                                <el-option v-for="item in tagsList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                                <el-option v-for="item in categorysList" :key="item.id" :label="item.name" :value="item.name"> </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -130,26 +132,27 @@ export default {
     data: function () {
         return {
             configs: {},
-            content: '',
+            // content: '',
             article: {
                 id: null,
                 title: '',
                 summary: '',
                 content: '',
-                publish_time: '',
-                update_time: '',
-                read_num: 0,
-                like_num:0,
-                picture_url: '',
-                article_status:0,
+                publishTime: '',
+                updateTime: '',
+                readNum: 0,
+                likeNum:0,
+                pictureUrl: '',
+                articleStatus:0,
                 top: 0,
                 categorys: [],
                 tags: []
             },
-            inputVisibleTag: false,
-            inputValueTag: '',
-            inputVisibleCategory: false,
-            inputValueCategory: '',
+            // inputVisibleTag: false,
+            // inputValueTag: '',
+            // inputVisibleCategory: false,
+            // inputValueCategory: '',
+            // 所有分类
             categorysList: [],
             // 所有标签
             tagsList: [],
@@ -163,7 +166,8 @@ export default {
     created: function () {
         // 跳转到这个路由页面的时候，判断是否有路径变量blog_id,如果有,查询该id的文章并展示在页面上
         // 这个方法的设计是为了从文章列表的编辑跳转时直接导入文章信息
-        if (this.$route.query.blog_id!==null) {
+        console.log(this.$route.query.blog_id);
+        if (this.$route.query.blog_id>=0) {
             this.getBlog();
         }
         // 获取所有标签和分类信息
@@ -185,22 +189,16 @@ export default {
         },
         getTagsList() {
             const _this = this;
-            this.$axios.get(`/admin/blog/${id}`).then((res) => {
-                _this.article = res.data.data;
-                _this.content = res.data.data.blog_content;
-                _this.tagsList = res.data.data.tags;
-                _this.categorys = res.data.data.cateGory;
+            this.$axios.get('/admin/tag/list').then((res) => {
+                _this.tagsList = res.data.data;
+                // _this.categorys = res.data.data.cateGory;
             });
         },
-        getData() {
+        getCategorysList() {
             const _this = this;
-            const id = this.$route.query.blog_id;
-            // 这里改成发两次请求比较好，第一次请求查询detail，第二次请求查询list
-            this.$axios.get(`/admin/blog/${id}`).then((res) => {
-                _this.blogDetail = res.data.data;
-                _this.content = res.data.data.blog_content;
-                _this.tagsList = res.data.data.tags;
-                _this.categorys = res.data.data.cateGory;
+            this.$axios.get('/admin/category/list').then((res) => {
+                _this.categorysList = res.data.data;
+                // _this.categorys = res.data.data.cateGory;
             });
         },
 
@@ -210,18 +208,16 @@ export default {
             // render 为 markdown 解析后的结果
             //  this.blogDetail.blog_content=render;
         },
+        // 发布文章
         release() {
             const _this = this;
-            _this.blogDetail.tags = _this.tagsList;
-            _this.blogDetail.blog_content = _this.content;
-            _this.blogDetail.cateGory = _this.categorys;
-            _this.blogDetail.blog_status = 0;
+            console.log(_this.article)
+            // _this.blogDetail.tags = _this.tagsList;
+            // _this.blogDetail.blog_content = _this.content;
+            // _this.blogDetail.cateGory = _this.categorys;
+            _this.article.articleStatus = 1;
             this.$axios
-                .post('/admin/saveBlog', _this.blogDetail, {
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
-                })
+                .post('/admin/article/saveBlog', _this.article,)
                 .then((res) => {
                     if (res.data.code == 200) {
                         this.$message.success(res.data.msg);
@@ -233,12 +229,13 @@ export default {
                     this.$message.error('不要再试了哦，没有权限');
                 });
         },
+        // 存为草稿
         saveblog() {
             const _this = this;
-            _this.blogDetail.tags = _this.tagsList;
-            _this.blogDetail.blog_content = _this.content;
-            _this.blogDetail.cateGory = _this.categorys;
-            _this.blogDetail.blog_status = 1;
+            // _this.blogDetail.tags = _this.tagsList;
+            // _this.blogDetail.blog_content = _this.content;
+            // _this.blogDetail.cateGory = _this.categorys;
+            _this.article.articleStatus = 0;
             this.$axios
                 .post('/admin/saveBlog', _this.blogDetail, {
                     headers: {
@@ -256,117 +253,120 @@ export default {
                     this.$message.error('不要再试了哦，没有权限');
                 });
         },
-        handleCloseTag(tag) {
-            this.tagsList.splice(this.tagsList.indexOf(tag), 1);
-        },
-        showInputTag() {
-            this.inputVisibleTag = true;
-            this.$nextTick((_) => {
-                this.$refs.saveTagInputTag.$refs.input.focus();
-            });
-        },
-        handleInputConfirmTag() {
-            const _this = this;
-            let tag_name = this.inputValueTag;
-            let data = {
-                tag_name
-            };
-            if (tag_name) {
-                //先判断是否有这个标签，如果有，则返回对应的id和name
-                this.$axios.get('/getTagByName/' + tag_name).then((res) => {
-                    if (res.data.code === 200) {
-                        _this.tagsList.push(res.data.data);
-                        this.$message.success('添加标签成功');
-                    } else {
-                        _this.$axios
-                            .post('/admin/saveTag', data, {
-                                headers: {
-                                    Authorization: localStorage.getItem('token')
-                                }
-                            })
-                            .then((res) => {
-                                let newTag = {
-                                    tag_id: res.data.data,
-                                    tag_name: tag_name
-                                };
-                                _this.tagsList.push(newTag);
-                                this.$message.success('添加标签成功');
-                            })
-                            .catch((err) => {
-                                this.$message.error('不要再试了哦，没有权限');
-                            });
-                    }
-                });
-            }
-            this.inputVisibleTag = false;
-            this.inputValueTag = '';
-        },
-        handleCloseCategory(category) {
-            this.categorys.splice(this.categorys.indexOf(category), 1);
-        },
-        showInputCategory() {
-            this.inputVisibleCategory = true;
-            this.$nextTick((_) => {
-                this.$refs.saveInputCategory.$refs.input.focus();
-            });
-        },
-        handleInputConfirmCategory() {
-            const _this = this;
-            let category_name = this.inputValueCategory;
-            let data = {
-                category_name
-            };
-            if (category_name) {
-                //先判断是否有这个分类，如果有，则返回对应的id和name
-                this.$axios.get('/getCateGoryByName/' + category_name).then((res) => {
-                    if (res.data.code === 200) {
-                        _this.categorys.push(res.data.data);
-                        this.$message.success('添加分类成功');
-                    } else {
-                        _this.$axios
-                            .post('/admin/saveCategory', data, {
-                                headers: {
-                                    Authorization: localStorage.getItem('token')
-                                }
-                            })
-                            .then((res) => {
-                                let newCategory = {
-                                    category_id: res.data.data,
-                                    category_name: category_name
-                                };
-                                _this.categorys.push(newCategory);
-                                this.$message.success('添加分类成功');
-                            })
-                            .catch((err) => {
-                                this.$message.error('不要再试了哦，没有权限');
-                            });
-                    }
-                });
-            }
-            this.inputVisibleCategory = false;
-            this.inputValueCategory = '';
-        },
-
+        // handleCloseTag(tag) {
+        //     this.tagsList.splice(this.tagsList.indexOf(tag), 1);
+        // },
+        // showInputTag() {
+        //     this.inputVisibleTag = true;
+        //     this.$nextTick((_) => {
+        //         this.$refs.saveTagInputTag.$refs.input.focus();
+        //     });
+        // },
+        // handleInputConfirmTag() {
+        //     const _this = this;
+        //     let tag_name = this.inputValueTag;
+        //     let data = {
+        //         tag_name
+        //     };
+        //     if (tag_name) {
+        //         //先判断是否有这个标签，如果有，则返回对应的id和name
+        //         this.$axios.get('/getTagByName/' + tag_name).then((res) => {
+        //             if (res.data.code === 200) {
+        //                 _this.tagsList.push(res.data.data);
+        //                 this.$message.success('添加标签成功');
+        //             } else {
+        //                 _this.$axios
+        //                     .post('/admin/saveTag', data, {
+        //                         headers: {
+        //                             Authorization: localStorage.getItem('token')
+        //                         }
+        //                     })
+        //                     .then((res) => {
+        //                         let newTag = {
+        //                             tag_id: res.data.data,
+        //                             tag_name: tag_name
+        //                         };
+        //                         _this.tagsList.push(newTag);
+        //                         this.$message.success('添加标签成功');
+        //                     })
+        //                     .catch((err) => {
+        //                         this.$message.error('不要再试了哦，没有权限');
+        //                     });
+        //             }
+        //         });
+        //     }
+        //     this.inputVisibleTag = false;
+        //     this.inputValueTag = '';
+        // },
+        // handleCloseCategory(category) {
+        //     this.categorys.splice(this.categorys.indexOf(category), 1);
+        // },
+        // showInputCategory() {
+        //     this.inputVisibleCategory = true;
+        //     this.$nextTick((_) => {
+        //         this.$refs.saveInputCategory.$refs.input.focus();
+        //     });
+        // },
+        // handleInputConfirmCategory() {
+        //     const _this = this;
+        //     let category_name = this.inputValueCategory;
+        //     let data = {
+        //         category_name
+        //     };
+        //     if (category_name) {
+        //         //先判断是否有这个分类，如果有，则返回对应的id和name
+        //         this.$axios.get('/getCateGoryByName/' + category_name).then((res) => {
+        //             if (res.data.code === 200) {
+        //                 _this.categorys.push(res.data.data);
+        //                 this.$message.success('添加分类成功');
+        //             } else {
+        //                 _this.$axios
+        //                     .post('/admin/saveCategory', data, {
+        //                         headers: {
+        //                             Authorization: localStorage.getItem('token')
+        //                         }
+        //                     })
+        //                     .then((res) => {
+        //                         let newCategory = {
+        //                             category_id: res.data.data,
+        //                             category_name: category_name
+        //                         };
+        //                         _this.categorys.push(newCategory);
+        //                         this.$message.success('添加分类成功');
+        //                     })
+        //                     .catch((err) => {
+        //                         this.$message.error('不要再试了哦，没有权限');
+        //                     });
+        //             }
+        //         });
+            // }
+        //     this.inputVisibleCategory = false;
+        //     this.inputValueCategory = '';
+        // },
+        
+        // 上传前校验格式
         onBeforeUploadImage(file) {
             const isIMAGE = file.type === 'image/jpeg' || 'image/jpg' || 'image/png';
-            const isLt1M = file.size / 1024 / 1024 < 1;
+            const isLt1M = file.size / 1024 /1024 < 10;
             if (!isIMAGE) {
                 this.$message.error('上传文件只能是图片格式!');
             }
             if (!isLt1M) {
-                this.$message.error('上传文件大小不能超过 1MB!');
+                this.$message.error('上传文件大小不能超过 10MB!');
             }
             return isIMAGE && isLt1M;
         },
         UploadImage(param) {
+            // 新建一个表单对象，和我们写得表单用法一样
+            console.log(param.file);
             const formData = new FormData();
             formData.append('blog_img', param.file);
             this.$axios
-                .post('/admin/uploadImg', formData, {
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
-                })
+                .post('/admin/uploadImg', formData
+                    // headers: {
+                    //     Authorization: localStorage.getItem('token')
+                    // }
+                )
                 .then((res) => {
                     this.$message.success(res.data.msg);
                     this.blogDetail.blog_cover_image = res.data.data;

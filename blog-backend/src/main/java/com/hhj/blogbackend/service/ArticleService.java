@@ -29,4 +29,7 @@ public interface ArticleService{
 
     // 根据id查询文章细节
     ArticleDetail selectDetailById(Serializable id);
+
+    // 保存文章
+    boolean saveBlog(ArticleDetail articleDetail);
 }

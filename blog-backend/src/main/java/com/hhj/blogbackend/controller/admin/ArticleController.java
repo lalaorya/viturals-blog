@@ -25,10 +25,10 @@ public class ArticleController {
 
     @Autowired
     ArticleService service;
-    @Autowired
-    TagService tagService;
-    @Autowired
-    CategoryService categoryService;
+//    @Autowired
+//    TagService tagService;
+//    @Autowired
+//    CategoryService categoryService;
 
     // 通过认证才能访问该资源
     @RequiresAuthentication
@@ -118,8 +118,21 @@ public class ArticleController {
             return  Result.success(articleDetail);
         }
         return Result.fail("查询失败,请联系管理员");
+    }
 
-
+    /**
+     * 保存文章到数据库
+     */
+    @PostMapping("/saveBlog")
+    @ApiOperation("保存文章到数据库")
+    @RequiresAuthentication
+    public Result saveBlog(@RequestBody ArticleDetail articleDetail){
+        boolean b = service.saveBlog(articleDetail);
+        if(b==true){
+            log.info("新增了一篇文章");
+            return Result.success("操作成功");
+        }
+        return Result.fail("操作失败，请联系管理员");
 
     }
 }

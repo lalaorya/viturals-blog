@@ -10,7 +10,9 @@ import com.hhj.blogbackend.mapper.ArticleMapper;
 import com.hhj.blogbackend.mapper.ArticleTagRelationMapper;
 import com.hhj.blogbackend.mapper.TagMapper;
 import com.hhj.blogbackend.pojo.Article;
+import com.hhj.blogbackend.pojo.ArticleCategoryRelation;
 import com.hhj.blogbackend.pojo.ArticleTagRelation;
+import com.hhj.blogbackend.pojo.Category;
 import com.hhj.blogbackend.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +119,54 @@ public class ArticleServiceImpl  implements ArticleService {
         articleDetail.setCategorys((ArrayList)categoryList);
 
         return articleDetail;
+    }
+
+
+
+    @Override
+    public boolean saveBlog(ArticleDetail articleDetail) {
+        Article article = new Article();
+        BeanUtil.copyProperties(articleDetail,article);
+        System.out.println(article.getId()+"ppppppppppppppppppppppppppppppppp");
+        if(article.getId()==0){
+            article.setId(mapper.selectCount(null)+1);
+        }
+        try{
+            mapper.insert(article);
+        }catch (Exception e){
+            mapper.updateById(article);
+        }
+
+
+
+//        log.info(article.toString());
+        ArrayList<String> tags = articleDetail.getTags();
+        // 根据标签名查询标签id
+        List<Integer> ids = tagService.selectIdByName(tags);
+        // 根据文章id和标签id更新关系表
+        List<ArticleTagRelation> list=new ArrayList<>();
+        for(Integer i:ids){
+            list.add(new ArticleTagRelation(article.getId(),i));
+        }
+        articleTagRelationService.saveBatch(list);
+
+        // 根据分类名查询分类id
+        ArrayList<String> categorys = articleDetail.getCategorys();
+        List<Category> idCg = categoryService.list((Wrapper) new QueryWrapper<>().select("id").in("name", categorys));
+        List<Integer> ids2 = new ArrayList<>();
+        for(Category c:idCg){
+            ids2.add(c.getId());
+        }
+        log.info(ids2.toString());
+
+        // 根据文章id和分类id更新关系表
+        List<ArticleCategoryRelation> list2=new ArrayList<>();
+        for(Integer i:ids2){
+            list2.add(new ArticleCategoryRelation(article.getId(),i));
+        }
+        articleCategoryRelationService.saveBatch(list2);
+
+        return true;
     }
 
 

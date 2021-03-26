@@ -43,4 +43,17 @@ public class TagServiceImpl implements TagService {
         }
         return res;
     }
+
+    @Override
+    public List<Integer> selectIdByName(List<String> list) {
+        QueryWrapper<Tag> wrapper = new QueryWrapper<>();
+        wrapper.select("id")
+                .in("name",list);
+        List<Tag> tags = mapper.selectList(wrapper);
+        List<Integer> res = new ArrayList<>();
+        for(Tag a:tags){
+            res.add(a.getId());
+        }
+        return res;
+    }
 }

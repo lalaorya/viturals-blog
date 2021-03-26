@@ -18,4 +18,9 @@ public interface TagService {
      */
     public List<String > selectTagById(List<Integer> list);
 
+    /**
+     * 根据标签名查询标签id
+     */
+    public List<Integer> selectIdByName(List<String> list);
+
 }

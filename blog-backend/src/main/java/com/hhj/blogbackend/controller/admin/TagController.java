@@ -29,6 +29,7 @@ public class TagController {
         List<Tag> tags = service.selectList();
         if(tags!=null){
             log.info("查询了所有标签");
+            log.info(tags.toString());
             return Result.success(tags);
         }else{
             log.info("查询所有标签失败，结果为null");

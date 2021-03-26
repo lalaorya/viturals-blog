@@ -1,11 +1,12 @@
 package com.hhj.blogbackend.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hhj.blogbackend.pojo.Category;
 import com.hhj.blogbackend.pojo.Tag;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface CategoryService extends IService<Category> {
 
     /**
      * 查询所有分类

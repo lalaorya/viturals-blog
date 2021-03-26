@@ -10,6 +10,4 @@ public interface MomentMapper extends BaseMapper<Moment> {
     /**
      * 查询动态总数
      */
-    @Override
-    Integer selectCount(Wrapper<Moment> queryWrapper);
 }

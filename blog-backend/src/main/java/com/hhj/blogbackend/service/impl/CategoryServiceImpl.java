@@ -1,6 +1,7 @@
 package com.hhj.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hhj.blogbackend.mapper.CategoryMapper;
 import com.hhj.blogbackend.pojo.Category;
 import com.hhj.blogbackend.pojo.Tag;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<CategoryMapper,Category> implements CategoryService {
 
     @Autowired
     CategoryMapper mapper;

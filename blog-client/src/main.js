@@ -1,58 +1,71 @@
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import VueRouter from 'vue-router'
-import Element from 'element-ui'
-import "element-ui/lib/theme-chalk/index.css"
-import 'element-ui/lib/theme-chalk/display.css'
-import './assets/style.css'
-import "./assets/typo.css";
-import Head from './components/Head'
-import Footer from './components/Footer'
-import FriendSider from './components/FriendSider'
-import tags from './components/tags'
-import categorys from './components/categorys'
-import commentList from './components/Comment'
-import Introduction from './components/Introduction'
-import store from './store'
-Vue.use(Element)
-import axios from '@/plugins/axios'
+import App from './App.vue' // Vue挂载到实例
+import router from './router' // Vue路由
+import store from './store' // Vue状态管理器
+import VueI18n from 'vue-i18n' // 导入vue-i18n
+import messages from './i18n' // 引入自定义国际化内容
+import 'view-design/dist/styles/iview.css' // 按需引入iView UI的样式
+import iViewUI from 'view-design/dist/iview' // 引入iview.js文件，这样才能使用iview.js中的i18n方法实现按需导入的iView组件的国际化
+
+// 若使用 import hljs from 'highlight.js'会引入所有的语言，导致性能降低
+import hljs from 'highlight.js/lib/core' // 引入highlight.js核心包
+import javascript from 'highlight.js/lib/languages/javascript' // 支持javascript语法高亮
+import java from 'highlight.js/lib/languages/java' // 支持java语法高亮
+import css from 'highlight.js/lib/languages/css' // 支持css语法高亮x
+import xml from 'highlight.js/lib/languages/xml' // 支持xml语法高亮
+import 'highlight.js/styles/monokai-sublime.css' // 引入样式文件
+import 'github-markdown-css';
+
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('java', java)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('xml', xml)
+// 可以在Vue组件中通过<highlightjs language='javascript' code="var x = 5;" />对代码进行语法高亮
+Vue.use(hljs.vuePlugin) // 非必须，也可以使用Vue.directive自定义配置highlightjs指令
+Vue.prototype.$hljs = hljs
+
+import axios from '@/network/axios'
 Vue.prototype.$axios = axios //
- // 全局注册
- // import with ES6
-Vue.component("Head",Head)
-Vue.component("Footer",Footer)
-Vue.component("FriendSider",FriendSider)
-Vue.component("tags",tags)
-Vue.component("categorys",categorys)
-Vue.component("commentList",commentList)
-Vue.component("Introduction",Introduction)
-Vue.use(VueRouter)
-const cubic = value => Math.pow(value, 3);
-const easeInOutCubic = value => value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
-Vue.prototype.scrollToTop = function () {
-	const el = document.documentElement
-	const beginTime = Date.now()
-	const beginValue = el.scrollTop
-	const rAF = window.requestAnimationFrame || (func => setTimeout(func, 16))
-	const frameFunc = () => {
-		const progress = (Date.now() - beginTime) / 500;
-		if (progress < 1) {
-			el.scrollTop = beginValue * (1 - easeInOutCubic(progress))
-			rAF(frameFunc)
-		} else {
-			el.scrollTop = 0
-		}
-	}
-	rAF(frameFunc)
-}
+
+import {Collapse,Divider,Panel} from "view-design";
+
+// 按需注册组件
+Vue.component('iv-row', iViewUI.Row)
+Vue.component('iv-col', iViewUI.Col)
+Vue.component('iv-progress', iViewUI.Progress)
+Vue.component('iv-page', iViewUI.Page)
+Vue.component('iv-icon', iViewUI.Icon)
+Vue.component('iv-affix', iViewUI.Affix)
+Vue.component('iv-input', iViewUI.Input)
+Vue.component('iv-switch', iViewUI.Switch)
+Vue.component('iv-tag', iViewUI.Tag)
+
+Vue.component("Collapse",Collapse)
+Vue.component("Panel",Panel)
+Vue.component("Divider",Divider)
+
+// 注册全局变量（非响应式）
+Vue.prototype.$Message = iViewUI.Message // 信息提示
+Vue.prototype.$Notice = iViewUI.Notice // 通知提醒
+Vue.prototype.$Modal = iViewUI.Modal // 对话框
+Vue.prototype.$Notice.config({ // 配置通知项
+  top: 70,
+  duration: 3
+})
+
+Vue.use(VueI18n) // 全局注册vue-i18n
+const i18n = new VueI18n({
+  locale: localStorage.getItem('language') || 'en', // 设置国际化语言
+  messages // 设置国际化内容
+})
+Vue.prototype.i18n = i18n // 为将路由中的title国际化，配置全局i18n
+iViewUI.i18n((key, value) => i18n.t(key, value))
+
 Vue.config.productionTip = false
 
-//希望大家能留下版权信息，十分感谢
-console.log("\n %c Hi-Dream’s BLOG 博客系统开源作者：datealive %c https://github.com/dateolive \n", "color: #48dbfb; background: #1b1c1d; padding:5px 0;", "background: #fadfa3; padding:5px 0;")
-
 new Vue({
-  store,
   router,
+  store,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

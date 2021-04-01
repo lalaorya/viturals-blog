@@ -1,34 +1,50 @@
 {
-  "name": "front-blog",
+  "name": "zcblog-front2client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "crm": "vue-cli-service build --mode crm",
+    "lint": "vue-cli-service lint",
+    "lint:style": "stylelint src/**/*.{vue,css,styl} --custom-syntax stylelint-plugin-stylus/custom-syntax"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.20.0",
     "core-js": "^3.6.5",
-    "element-ui": "^2.15.0",
-    "mavon-editor": "^2.9.1",
-    "node-sass": "^5.0.0",
-    "prismjs": "^1.23.0",
-    "sass-loader": "^10.1.1",
+    "github-markdown-css": "^4.0.0",
+    "highlight.js": "^10.7.1",
+    "marked": "^2.0.1",
     "tocbot": "^4.12.2",
+    "valine": "^1.4.14",
+    "view-design": "^4.3.2",
     "vue": "^2.6.11",
+    "vue-i18n": "^8.21.1",
     "vue-router": "^3.2.0",
-    "vuex": "^3.6.0"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "babel-plugin-prismjs": "^2.0.1",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "@vue/eslint-config-standard": "^5.1.2",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-import": "^1.13.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "style-resources-loader": "^1.4.1",
+    "stylelint": "^13.7.1",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-plugin-stylus": "^0.9.0",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-dev-server": "^2.6.1"
+  }
 }

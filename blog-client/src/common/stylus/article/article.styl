@@ -1,0 +1,70 @@
+.article-page-content
+  >>>h1
+    margin 1rem 0
+    line-height 32px
+    font-size 18px
+    font-weight 600
+    border-bottom 1px solid #ececec
+    &:before
+      content '#'
+      margin-right 8px
+      font-size 18px
+      color #6DB33F
+  >>>h2
+    margin 0.8rem 0
+    line-height 28px
+    font-size 16px
+    font-weight 600
+    &:before
+      content '>'
+      margin-right 8px
+      font-size 16px
+      color #FFAD85
+  >>>h3,h4,h5,h6
+    margin 0.5rem 0
+    line-height 28px
+    font-size 14px
+    font-weight 600
+    &:before
+      content '>>'
+      margin-right 8px
+      font-size 1rem
+      color #FFAD85
+  >>>p
+    padding 0 10px
+    text-indent 2em
+    text-align justify
+    line-height 28px
+    font-size 14px
+  // 给代码框添加间隙
+  >>>code
+    margin 0 10px
+    background-color: #f3f4f4;
+  // 给代码框添加样式
+  >>>.hljs ul
+    list-style decimal
+    margin 0 0 0 40px!important
+    padding 0
+  >>>.hljs li
+    list-style decimal-leading-zero
+    border-left 1px solid $color-border !important
+    padding 2px 5px !important
+    margin 0 !important
+    line-height 14px
+    width 100%
+    box-sizing border-box
+  >>>.hljs li:nth-of-type(even)
+    background-color rgba(255,255,255,.015)
+    color inherit
+
+
+  >>> ul,
+    ol {
+    padding-left: 30px;
+  }
+  >>> ul:first-child,ol:first-child {
+    margin-top: 0;
+  }
+  >>> ul:last-child,ol:last-child {
+    margin-bottom: 0;
+} 

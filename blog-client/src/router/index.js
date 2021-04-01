@@ -1,97 +1,36 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store'
-import Home from '../views/Home.vue'
-import Archive from '../views/Archive.vue'
-import Article from '../views/Article.vue'
-import BlogsByParams from '../components/BlogsByTagCate.vue'
-import friends from '../views/Friends.vue'
-import about from '../views/About.vue'
-import Moment from '../views/Moment.vue'
+
+import routes from './routes'
+
+import { LoadingBar } from 'view-design'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    component: Home,
-    meta: {
-      title: '首页'
-    }
-  },
-  {
-    path: '/Home',
-    name: 'Home',
-    component: Home,
-    meta: {
-      title: '首页'
-    }
-  },
-  {
-    path: '/archive',
-    name: 'archive',
-    component: Archive,
-    meta: {
-      title: '归档'
-    }
-  },
-  {
-    path: '/moment',
-    name: 'moment',
-    component: Moment,
-    meta: {
-      title: '动态说说'
-    }
-  },
-  {
-    path: '/article/:blogId',
-    name: 'article',
-    component: Article,
-    meta: {
-      title: '文章'
-    }
-  },
-  {
-    path: '/list/:type/:id',
-    name: 'list',
-    component: BlogsByParams,
-    meta: {
-      title: '文章'
-    }
-  },
-  {
-    path: '/friends',
-    name: 'friends',
-    component: friends,
-    meta: {
-      title: '友情链接'
-    }
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: about,
-    meta: {
-      title: '关于我'
-    }
-  }
-]
-
 const router = new VueRouter({
   mode: 'history',
+  scrollBehavior: () => ({ y: 0 }),
   base: process.env.BASE_URL,
   routes
 })
 
-//挂载路由守卫
-router.beforeEach((to, from, next) => {
+LoadingBar.config({ // 配置进度条
+  color: '#19be6b',
+  failedColor: '#ff9900',
+  height: 2
+})
+
+router.beforeEach((to, from, next) => { // 动态更新页面title
+  LoadingBar.start()
+  window.scrollTo(0, 0)
   if (to.meta.title) {
-    if (store.state.siteInfo.webTitleSuffix) {
-      document.title = to.meta.title + store.state.siteInfo.webTitleSuffix
-    } else {
-      document.title = to.meta.title
-    }
+    document.title = Vue.prototype.i18n.t(to.meta.title)
   }
   next()
+})
+
+router.afterEach((to, from, next) => {
+  LoadingBar.finish()
+  window.scrollTo(0, 0)
 })
 export default router

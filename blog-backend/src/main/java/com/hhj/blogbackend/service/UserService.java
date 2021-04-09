@@ -1,8 +1,9 @@
 package com.hhj.blogbackend.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hhj.blogbackend.pojo.User;
 
-public interface UserService {
+public interface UserService extends IService<User>{
 
     public User getUserByUsername(String username);
 

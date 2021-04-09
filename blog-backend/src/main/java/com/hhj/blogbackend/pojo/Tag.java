@@ -1,5 +1,6 @@
 package com.hhj.blogbackend.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
-    @TableId
+    @TableId(type = IdType.AUTO)
     Integer id;
     @NotBlank
     String name;

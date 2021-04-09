@@ -40,8 +40,8 @@ public class AllExceptionHandler {
     @ExceptionHandler(value = UnauthorizedException.class)
     public Result handler(UnauthorizedException e) {
         // 没有认证，无法访问
-        log.error("============================授权异常：{}", e);
-        return Result.fail(401,"授权异常，请登录",null);
+        log.error("============================授权异常：{}", e.getClass().getName());
+        return Result.fail(200,"授权异常，请登录",null);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -78,9 +78,11 @@ public class AllExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = ExpiredCredentialsException.class)
     public Result handler(ExpiredCredentialsException  e) {
-        log.error("====================token已失效：{}", e);
+        log.error("====================token已失效：{}");
         return Result.fail(401,e.getMessage(),null);
     }
+
+
 
 
 

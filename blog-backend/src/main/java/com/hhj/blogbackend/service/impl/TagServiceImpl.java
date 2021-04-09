@@ -3,6 +3,7 @@ package com.hhj.blogbackend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hhj.blogbackend.mapper.TagMapper;
 import com.hhj.blogbackend.pojo.ArticleTagRelation;
 import com.hhj.blogbackend.pojo.Tag;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TagServiceImpl implements TagService {
+public class TagServiceImpl extends ServiceImpl<TagMapper,Tag> implements TagService {
 
     @Autowired
     TagMapper mapper;

@@ -10,7 +10,9 @@ import com.hhj.blogbackend.service.TagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -69,6 +71,8 @@ public class ArticleController {
      * 传入文章id index
      */
     @RequiresAuthentication
+    // 只有root用户才能访问
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     @DeleteMapping("delete")
     @ApiOperation("删除文章")
     public Result deleteById(@RequestParam("id")Integer index){
@@ -96,7 +100,7 @@ public class ArticleController {
 //        int temp=(isTop==0?1:0);
         Article article = service.selectById(id);
         article.setTop(isTop);
-        int i = service.updateById(article);
+        int i = service.updateById1(article);
         log.info("更新文章表中id为{}的文章置顶状态,结果为{}",id,i);
         if(i==1)    return Result.success(200,"操作成功",null);
         return Result.fail("操作失败,数据库中查无此项");
@@ -125,6 +129,7 @@ public class ArticleController {
      */
     @PostMapping("/saveBlog")
     @ApiOperation("保存文章到数据库")
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     @RequiresAuthentication
     public Result saveBlog(@RequestBody ArticleDetail articleDetail){
         boolean b = service.saveBlog(articleDetail);

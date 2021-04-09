@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hhj.blogbackend.dto.ArticleDetail;
+import com.hhj.blogbackend.dto.ArticleInfo;
 import com.hhj.blogbackend.pojo.Article;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
-public interface ArticleService{
+public interface ArticleService extends IService<Article>{
     // 获取所有博文
     List<Article> selectList();
 
@@ -23,7 +25,8 @@ public interface ArticleService{
     int deleteById(Serializable id);
 
     // 更新文章
-    int updateById(Article entity);
+
+    int updateById1(Article entity);
 
     Article selectById(Serializable id);
 
@@ -32,4 +35,13 @@ public interface ArticleService{
 
     // 保存文章
     boolean saveBlog(ArticleDetail articleDetail);
+
+
+    public List<Map<String,Object>> tagList(Serializable id);
+
+    public List<Map<String,Object>> categoryList(Serializable id);
+
+    boolean addReadNum(Article article);
+
+    void getReadNumFromRedis(ArticleInfo articleInfo);
 }

@@ -1,12 +1,13 @@
 package com.hhj.blogbackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hhj.blogbackend.pojo.Tag;
 
 import java.io.Serializable;
 import java.util.List;
 
-public interface TagService {
+public interface TagService extends IService<Tag> {
 
     /**
      * 查询所有标签

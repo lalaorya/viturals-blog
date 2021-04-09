@@ -67,8 +67,9 @@ public class LoginController {
 
     @ApiOperation("注销用户")
     // 需要认证才能访问该资源
-    @RequiresAuthentication
+//    @RequiresAuthentication
     @GetMapping("logout")
+
     public Result logout(){
         System.out.println(11111);
 //        Subject subject = SecurityUtils.getSubject();

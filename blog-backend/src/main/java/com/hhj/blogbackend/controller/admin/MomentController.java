@@ -12,7 +12,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,7 @@ public class MomentController {
     @RequiresAuthentication
     @PutMapping("update")
     @ApiOperation("更新动态")
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     public Result updateMomemt(@RequestBody MomentChangeDto dto){
         Moment moment = new Moment();
         BeanUtil.copyProperties(dto,moment);
@@ -63,6 +66,7 @@ public class MomentController {
 
     @RequiresAuthentication
     @PostMapping("save")
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     @ApiOperation("新增动态")
     public Result saveMomemt(@RequestBody MomentChangeDto dto){
         Moment moment = new Moment();
@@ -81,6 +85,7 @@ public class MomentController {
     @RequiresAuthentication
     @PostMapping("changeStatus")
     @ApiOperation("修改动态的状态")
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     public Result changeStatus(@RequestBody Map<String,Integer> map){
         Integer id=map.get("id");
         Integer status = map.get("status");
@@ -102,6 +107,7 @@ public class MomentController {
 
     @RequiresAuthentication
     @GetMapping("delete")
+    @RequiresPermissions(value = "root",logical = Logical.AND)
     @ApiOperation("删除动态")
     public Result deleteMomemt(@RequestParam("id") Integer id){
         boolean b = service.removeById(id);

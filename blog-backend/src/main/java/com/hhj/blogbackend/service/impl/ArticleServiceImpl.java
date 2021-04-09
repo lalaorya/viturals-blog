@@ -6,29 +6,29 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hhj.blogbackend.dto.ArticleDetail;
+import com.hhj.blogbackend.dto.ArticleInfo;
 import com.hhj.blogbackend.mapper.ArticleMapper;
-import com.hhj.blogbackend.mapper.ArticleTagRelationMapper;
-import com.hhj.blogbackend.mapper.TagMapper;
-import com.hhj.blogbackend.pojo.Article;
-import com.hhj.blogbackend.pojo.ArticleCategoryRelation;
-import com.hhj.blogbackend.pojo.ArticleTagRelation;
-import com.hhj.blogbackend.pojo.Category;
+import com.hhj.blogbackend.pojo.*;
 import com.hhj.blogbackend.service.*;
+import com.hhj.blogbackend.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
-public class ArticleServiceImpl  implements ArticleService {
+public class ArticleServiceImpl  extends ServiceImpl<ArticleMapper,Article> implements ArticleService {
     @Autowired
     ArticleMapper mapper;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Autowired
     TagService tagService;
@@ -63,7 +63,7 @@ public class ArticleServiceImpl  implements ArticleService {
     public Page selectPage(int currentPage,Wrapper<Article> queryWrapper) {
         Page<Article> page = new Page<>(currentPage, 6);
         mapper.selectPage(page, null);
-        System.out.println(page);
+//        System.out.println(page);
         return page;
     }
 
@@ -74,7 +74,7 @@ public class ArticleServiceImpl  implements ArticleService {
     }
 
     @Override
-    public int updateById(Article entity) {
+    public int updateById1(Article entity) {
         int i = mapper.updateById(entity);
         return i;
     }
@@ -125,48 +125,106 @@ public class ArticleServiceImpl  implements ArticleService {
 
     @Override
     public boolean saveBlog(ArticleDetail articleDetail) {
+
+
+//        System.out.println(articleDetail.toString());
         Article article = new Article();
         BeanUtil.copyProperties(articleDetail,article);
-        System.out.println(article.getId()+"ppppppppppppppppppppppppppppppppp");
+//        System.out.println(article.getId()+"ppppppppppppppppppppppppppppppppp");
+        int b;
         if(article.getId()==0){
-            article.setId(mapper.selectCount(null)+1);
+           b = mapper.insert(article);
+        }else {
+            article.setUpdateTime(new Date());
+            b = mapper.updateById(article);
         }
-        try{
-            mapper.insert(article);
-        }catch (Exception e){
-            mapper.updateById(article);
-        }
-
-
-
+        if(b>0){
+            // 维护两个关系表
 //        log.info(article.toString());
-        ArrayList<String> tags = articleDetail.getTags();
-        // 根据标签名查询标签id
-        List<Integer> ids = tagService.selectIdByName(tags);
-        // 根据文章id和标签id更新关系表
-        List<ArticleTagRelation> list=new ArrayList<>();
-        for(Integer i:ids){
-            list.add(new ArticleTagRelation(article.getId(),i));
-        }
-        articleTagRelationService.saveBatch(list);
+            ArrayList<String> tags = articleDetail.getTags();
+            // 根据标签名查询标签id
+            List<Integer> ids = tagService.selectIdByName(tags);
+            // 根据文章id和标签id更新关系表
+            List<ArticleTagRelation> list=new ArrayList<>();
+            for(Integer i:ids){
+                list.add(new ArticleTagRelation(article.getId(),i));
+            }
+            articleTagRelationService.saveBatch(list);
 
-        // 根据分类名查询分类id
-        ArrayList<String> categorys = articleDetail.getCategorys();
-        List<Category> idCg = categoryService.list((Wrapper) new QueryWrapper<>().select("id").in("name", categorys));
-        List<Integer> ids2 = new ArrayList<>();
-        for(Category c:idCg){
-            ids2.add(c.getId());
-        }
-        log.info(ids2.toString());
+            // 根据分类名查询分类id
+            ArrayList<String> categorys = articleDetail.getCategorys();
+            List<Category> idCg = categoryService.list((Wrapper) new QueryWrapper<>().select("id").in("name", categorys));
+            List<Integer> ids2 = new ArrayList<>();
+            for(Category c:idCg){
+                ids2.add(c.getId());
+            }
+            log.info(ids2.toString());
 
-        // 根据文章id和分类id更新关系表
-        List<ArticleCategoryRelation> list2=new ArrayList<>();
-        for(Integer i:ids2){
-            list2.add(new ArticleCategoryRelation(article.getId(),i));
+            // 根据文章id和分类id更新关系表
+            List<ArticleCategoryRelation> list2=new ArrayList<>();
+            for(Integer i:ids2){
+                list2.add(new ArticleCategoryRelation(article.getId(),i));
+            }
+            articleCategoryRelationService.saveBatch(list2);
+            return true;
         }
-        articleCategoryRelationService.saveBatch(list2);
 
-        return true;
+        return false;
+    }
+
+
+    // 根据文章id返回标签信息
+    public List<Map<String,Object>> tagList(Serializable id){
+        List<Integer> tagIdList = articleTagRelationService.selectList(id);
+        Wrapper<Tag> w = new QueryWrapper<Tag>().in("id", tagIdList);
+        List<Map<String, Object>> maps = tagService.listMaps(w);
+        return maps;
+
+    }
+
+    // 根据文章id返回标签信息
+    public List<Map<String,Object>> categoryList(Serializable id){
+        List<Integer> categoryList = articleCategoryRelationService.selectList(id);
+        QueryWrapper<Category> w = new QueryWrapper<Category>().in("id", categoryList);
+        List<Map<String, Object>> maps = categoryService.listMaps(w);
+        return maps;
+
+    }
+
+    @Override
+    public boolean addReadNum(Article article) {
+        String key="post:viewCount:"+article.getId();
+        Integer ViewCount = (Integer) redisUtil.hget(key, "post:viewCount");
+//        System.out.println(ViewCount);
+        //判断redis中是否有当前文章的浏览量
+        //
+        // ，如果没有，则在实体类获取浏览量+1
+        if(ViewCount!=null){
+            article.setReadNum(ViewCount+1);
+        }else{
+            log.info("一个人浏览了");
+            article.setReadNum(article.getReadNum()+1);
+        }
+        boolean hSetViewCount = redisUtil.hset(key, "post:viewCount", article.getReadNum());
+        if(hSetViewCount){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public void getReadNumFromRedis(ArticleInfo articleInfo) {
+        String key="post:viewCount:"+articleInfo.getId();
+        Integer ViewCount = (Integer) redisUtil.hget(key, "post:viewCount");
+        if(ViewCount!=null){
+            articleInfo.setReadNum(ViewCount);
+        }else{
+            redisUtil.hset(key, "post:viewCount", articleInfo.getReadNum());
+        }
+
     }
 
 

@@ -55,7 +55,7 @@ Vue.prototype.$Notice.config({ // 配置通知项
 
 Vue.use(VueI18n) // 全局注册vue-i18n
 const i18n = new VueI18n({
-  locale: localStorage.getItem('language') || 'en', // 设置国际化语言
+  locale: localStorage.getItem('language') || 'zh', // 设置国际化语言
   messages // 设置国际化内容
 })
 Vue.prototype.i18n = i18n // 为将路由中的title国际化，配置全局i18n

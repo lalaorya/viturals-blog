@@ -207,7 +207,7 @@ export default {
       };
       // 发送Ajax请求，提交分页相关参数
       console.log(param);
-       this.$axios.post("/blog/page",param).then(res => {
+       this.$axios.post("blog/page",param).then(res => {
         console.log("------------")
         console.log(res.data.data)
         // _this.blogcount = res.data.data;

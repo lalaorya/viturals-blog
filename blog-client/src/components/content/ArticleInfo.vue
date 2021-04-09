@@ -6,18 +6,40 @@
     <div class="update-time-group"><span class="iconfont">&#xe50a;</span>{{article.updateTime}}</div>
     <div class="read-num-group"><span class="iconfont">&#xe63f;</span>{{article.readNum}}</div>
     <span class="right-separator">|</span>
-    <div class="like-num-group" @click="handleToLikeNum"><span class="iconfont">&#xe504;</span>{{article.likeNum}}</div>
+    <div class="like-num-group" @click="handleToLikeNum()">
+      <span v-if=status class="iconfont">&#xe504;</span>
+      <span v-else class="iconfont" style="color:green">&#xe504;</span>
+      {{article.likeNum}}
+      </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
   name: 'ArticleInfo',
+  data(){
+    return{
+      status:1
+    }
+  },
   props: ['article'],
   methods: {
     // 这个要发送ajax到后端
     handleToLikeNum () {
-      console.log('点赞数增加' + (++this.article.likeNum))
+      const _this=this;
+      if(_this.status===1){
+        _this.article.likeNum++;
+        _this.status=0;
+      }else{
+        _this.article.likeNum--;
+        _this.status=1;
+      }
+
+      // get
+      
+      // console.log('点赞数增加' + (++this.article.likeNum))
+
+
     }
   }
 }

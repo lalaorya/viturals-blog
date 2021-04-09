@@ -17,19 +17,25 @@
           v-model="value2"
           accordion
           simple
-          style="text-align: left; padding-left: 0px; font-weight: 500"
+          style="text-align: left; padding-left: 0px; font-weight: 500 ;line-height:normal;"
         >
           <Panel name="1" hide-arrow:true style="padding: 5px 0">
             公告栏😁
-            <div slot="content">博客正在更新中!!</div>
+            <div slot="content">本博客使用springboot+vue实现，前后端分离(<a href="http://47.119.115.60/admin/" style="color:#2d8cf0">后台管理系统</a>)。前端模板来自
+              <a href="https://github.com/progzc/zcblog" style="color:#2d8cf0">zcblog</a>，在此基础上做了部分修改，特此感谢
+              <br>
+              目前本站还在开发中，并不是稳定版本，后续会陆续修复~
+              <br>
+              本项目已在<a href="https://github.com/sang-Mu/viturals-blog/tree/master" style="color:#2d8cf0">github</a>开源,如果对你有帮助,请留下star⭐支持一下
+              </div>
           </Panel>
           <Panel name="2" hide-arrow:true style="padding: 5px 0">
             博客更新内容😎
-            <div slot="content">debug中...</div>
+            <div slot="content">使用redis实现了本站访客量,访问量以及文章阅读量的统计</div>
           </Panel>
           <Panel name="3" hide-arrow:true style="padding: 5px 0">
             关于我🙋‍♂️
-            <div slot="content">大三在校生，计算机专业</div>
+            <div slot="content">大三在校生，计算机科学与技术专业</div>
           </Panel>
         </Collapse>
       </div>
@@ -64,8 +70,9 @@
             ><span class="iconfont">&#xe613;</span>{{ $t("homeNav.tags") }}</a
           >
           <span class="separator"></span>
-          <a class="menu-item-tags" href="/tags"
-            ><span class="iconfont">&#xe613;</span>{{ $t("homeNav.categorys") }}</a
+          <a class="menu-item-tags" href="#"
+            ><span class="iconfont"><img src="~assets/img/category.png" style="height:15px;width:15px"/>
+              </span>{{ $t("homeNav.categorys") }}</a
           >
         </div>
       </div>
@@ -121,7 +128,9 @@ export default {
         display: block;
         text-align: center;
 
-
+        a{
+          color :#2d8cf0
+        }
         img {
           display: inline-block;
           vertical-align: top;
@@ -144,8 +153,11 @@ export default {
       }
 
       .author-motto {
+        font-size: 14px;
         margin: 0.5rem 0;
-        font-weight: 300;
+        font-weight: 350;
+       
+        line-height: normal;
         color: $color-font-blog-desc;
       }
 
@@ -178,7 +190,7 @@ export default {
 
     .side-bar-nav-menu {
       padding: 0.5rem 0;
-      margin: 3rem 0.8em 0.8rem 0.8rem;
+      margin: 1rem 0.8em 0.8rem 0.8rem;
       font-weight: normal;
 
       .menu-item-choose {

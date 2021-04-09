@@ -3,10 +3,10 @@ module.exports = {
     home: 'Home',
     tags: 'Tags',
     categorys:'Categorys',
-    monent:'moment',
+    moment:'moment',
     timeline: 'Timeline',
-    pseudonym: 'Clouds',
-    motto: 'Where of what\'s past is prologue',
+    pseudonym: 'Virtual',
+    motto: 'We don’t have to care about what the future looks like, like a poem written by a mentally ill person, or a firework festival',
     searchPlaceholder: 'Search keywords...',
     pageView: 'PV',
     uniqueVisitor: 'UV',
@@ -23,11 +23,11 @@ module.exports = {
     copyrightDeclaration: 'Besides specially states, copyright license is CC BY-NC-SA 4.0.'
   },
   metaTitle: {
-    index: 'Home | Clouds',
-    timeline: 'Timeline | Clouds',
-    tags: 'Tags | Clouds',
-    tag: 'Tag | Clouds',
-    article: 'Article | Clouds'
+    index: 'Home | Virtual',
+    timeline: 'Timeline | Virtual',
+    tags: 'Tags | Virtual',
+    tag: 'Tag | Virtual',
+    article: 'Article | Virtual'
   },
   language: {
     english: 'EN',

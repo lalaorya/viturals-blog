@@ -3,11 +3,11 @@
     <!--侧边栏页脚-->
     <div class="side-bar-footer">
       <div class="links">
-        <a href="https://github.com/progzc/zcblog" target="_blank"><span class="iconfont github">&#xe64a;</span></a>
-        <a href="https://gitee.com/progzc" target="_blank"><span class="iconfont gitee">&#xe6d0;</span></a>
+        <a href="https://github.com/sang-Mu/viturals-blog/tree/master" target="_blank"><span class="iconfont github">&#xe64a;</span></a>
+        <a href="https://gitee.com/" target="_blank"><span class="iconfont gitee">&#xe6d0;</span></a>
         <a href="#" target="_blank"><span class="iconfont admin">&#xe6ed;</span></a>
         <a href="#" target="_blank"><span class="iconfont docs">&#xe6f7;</span></a>
-        <a href="http://qhnmn5y5g.hn-bkt.clouddn.com/personal-wx.jpg" target="_blank"><span class="iconfont wx">&#xe601;</span></a>
+        <a href="#" target="_blank"><span class="iconfont wx">&#xe601;</span></a>
       </div>
     </div>
   </div>

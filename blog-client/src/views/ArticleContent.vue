@@ -339,7 +339,10 @@ export default {
       this.$axios.get(`/blog/${id}`).then(res => {
         console.log(res.data.data)
         _this.article = res.data.data;
+        // 把markdown转化为html
         _this.article.content=marked(_this.article.content);
+        console.log(111111);
+        console.log(_this.article.content);
       });
     }
   }

@@ -22,13 +22,12 @@
                                 accept="imgae/jpeg, image/png, image/jpg"
                                 list-type="picture-card"
                                 :before-upload="onBeforeUploadImage"
-                                
                                 :on-change="fileChange"
                                 :file-list="fileList"
                                 :limit="1"
                             >
-                            <!-- 文章上传先不处理，这行本放在上面空行 -->
-                            <!-- :http-request="UploadImage" -->
+                                <!-- 文章上传先不处理，这行本放在上面空行 -->
+                                <!-- :http-request="UploadImage" -->
                                 <el-button size="small" type="primary">点击上传</el-button>
                                 <div slot="tip" class="el-upload__tip">只能上传jpg/jpeg/png文件</div>
                             </el-upload>
@@ -51,54 +50,12 @@
                             <el-switch v-model="article.top" :active-value="1" :inactive-value="0" active-color="#13ce66"></el-switch>
                         </el-form-item>
                         <el-form-item label="文章标签">
-                            <!-- 原作者这段写得有点麻烦，我用多选框实现简单得多 -->
-                            <!-- <el-tag
-                                :key="tag.tag_id"
-                                v-for="tag in tagsList"
-                                closable
-                                :disable-transitions="false"
-                                @close="handleCloseTag(tag)"
-                            >{{tag.tag_name}}</el-tag>
-                            <el-input
-                                class="input-new-tag"
-                                v-if="inputVisibleTag"
-                                v-model="inputValueTag"
-                                ref="saveTagInputTag"
-                                size="small"
-                                @keyup.enter.native="handleInputConfirmTag"
-                                @blur="handleInputConfirmTag"
-                            ></el-input>
-                            <el-button
-                                v-else
-                                class="button-new-tag"
-                                size="small"
-                                @click="showInputTag"
-                            >+ New Tag</el-button> -->
-                            <el-select v-model="article.tags" multiple placeholder="+New Tag" size="mini" filterable="true ">
+                            <el-select v-model="article.tags" multiple placeholder="+New Tag" size="mini">
                                 <el-option v-for="item in tagsList" :key="item.id" :label="item.name" :value="item.name"> </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="文章分类">
-                            <!-- <el-tag
-                                :key="category.category_id"
-                                v-for="category in categorys"
-                                closable
-                                :disable-transitions="false"
-                                @close="handleCloseCategory(category)"
-                                >{{ category.category_name }}</el-tag
-                            >
-                            <el-input
-                                class="input-new-tag"
-                                v-if="inputVisibleCategory"
-                                v-model="inputValueCategory"
-                                ref="saveInputCategory"
-                                size="small"
-                                @keyup.enter.native="handleInputConfirmCategory"
-                                @blur="handleInputConfirmCategory"
-                            ></el-input>
-                            <el-button v-else class="button-new-tag" size="small" @click="showInputCategory">+ New Category</el-button> -->
-
-                            <el-select v-model="article.categorys" multiple placeholder="+New Tag" size="mini" filterable="true ">
+                            <el-select v-model="article.categorys" multiple placeholder="+New Tag" size="mini">
                                 <el-option v-for="item in categorysList" :key="item.id" :label="item.name" :value="item.name"> </el-option>
                             </el-select>
                         </el-form-item>
@@ -133,6 +90,7 @@ export default {
         return {
             configs: {},
             // content: '',
+
             article: {
                 id: null,
                 title: '',
@@ -141,13 +99,15 @@ export default {
                 publishTime: '',
                 updateTime: '',
                 readNum: 0,
-                likeNum:0,
+                likeNum: 0,
                 pictureUrl: '',
-                articleStatus:0,
+                articleStatus: 0,
                 top: 0,
                 categorys: [],
                 tags: []
             },
+
+            html: '',
             // inputVisibleTag: false,
             // inputValueTag: '',
             // inputVisibleCategory: false,
@@ -163,25 +123,40 @@ export default {
     components: {
         mavonEditor
     },
-    created: function () {
+    watch: {
+        $route: function () {
+            if (this.$route.query.blog_id >= 0) {
+                this.getBlog();
+            }else{
+                this.article={};
+            }
+            // 获取所有标签和分类信息
+            this.getTagsList();
+            this.getCategorysList();
+        }
+    },
+    created: function() {
+        this.html = this.article.content;
         // 跳转到这个路由页面的时候，判断是否有路径变量blog_id,如果有,查询该id的文章并展示在页面上
         // 这个方法的设计是为了从文章列表的编辑跳转时直接导入文章信息
-        console.log(this.$route.query.blog_id);
-        if (this.$route.query.blog_id>=0) {
-            this.getBlog();
-        }
+        // console.log(this.$route.query.blog_id);
+        // if (this.$route.query.blog_id >= 0) {
+        //     console.log('ppppppppppppppp');
+        //     this.getBlog();
+        //     // location.reload();
+        // }
         // 获取所有标签和分类信息
         this.getTagsList();
         this.getCategorysList();
     },
     methods: {
-        getBlog () {
+        getBlog() {
             const _this = this;
             const id = this.$route.query.blog_id;
             // 这里改成发两次请求比较好，第一次请求查询detail，第二次请求查询list
             this.$axios.get(`/admin/article/${id}`).then((res) => {
                 _this.article = res.data.data;
-                console.log(_this.article)
+                // console.log(_this.article);
                 // _this.content = res.data.data.blog_content;
                 // _this.tagsList = res.data.data.tags;
                 // _this.categorys = res.data.data.cateGory;
@@ -202,25 +177,32 @@ export default {
             });
         },
 
+        // markdown中的图片上传
         // 将图片上传到服务器，返回地址替换到md中
         $imgAdd(pos, $file) {},
         change(value, render) {
-            // render 为 markdown 解析后的结果
-            //  this.blogDetail.blog_content=render;
+            const _this = this;
+            // // render 为 markdown 解析后的结果
+            // //  this.blogDetail.blog_content=render;
+            _this.html = render;
+
+            console.log(render);
         },
         // 发布文章
         release() {
             const _this = this;
-            console.log(_this.article)
             // _this.blogDetail.tags = _this.tagsList;
             // _this.blogDetail.blog_content = _this.content;
             // _this.blogDetail.cateGory = _this.categorys;
             _this.article.articleStatus = 1;
+            // _this.article.content = _this.html;
+            console.log(_this.article);
             this.$axios
-                .post('/admin/article/saveBlog', _this.article,)
+                .post('/admin/article/saveBlog', _this.article)
                 .then((res) => {
                     if (res.data.code == 200) {
                         this.$message.success(res.data.msg);
+                        // _this.$router.push({ path: '/admin/articles' })
                     } else {
                         this.$message.error(res.data.msg);
                     }
@@ -253,101 +235,11 @@ export default {
                     this.$message.error('不要再试了哦，没有权限');
                 });
         },
-        // handleCloseTag(tag) {
-        //     this.tagsList.splice(this.tagsList.indexOf(tag), 1);
-        // },
-        // showInputTag() {
-        //     this.inputVisibleTag = true;
-        //     this.$nextTick((_) => {
-        //         this.$refs.saveTagInputTag.$refs.input.focus();
-        //     });
-        // },
-        // handleInputConfirmTag() {
-        //     const _this = this;
-        //     let tag_name = this.inputValueTag;
-        //     let data = {
-        //         tag_name
-        //     };
-        //     if (tag_name) {
-        //         //先判断是否有这个标签，如果有，则返回对应的id和name
-        //         this.$axios.get('/getTagByName/' + tag_name).then((res) => {
-        //             if (res.data.code === 200) {
-        //                 _this.tagsList.push(res.data.data);
-        //                 this.$message.success('添加标签成功');
-        //             } else {
-        //                 _this.$axios
-        //                     .post('/admin/saveTag', data, {
-        //                         headers: {
-        //                             Authorization: localStorage.getItem('token')
-        //                         }
-        //                     })
-        //                     .then((res) => {
-        //                         let newTag = {
-        //                             tag_id: res.data.data,
-        //                             tag_name: tag_name
-        //                         };
-        //                         _this.tagsList.push(newTag);
-        //                         this.$message.success('添加标签成功');
-        //                     })
-        //                     .catch((err) => {
-        //                         this.$message.error('不要再试了哦，没有权限');
-        //                     });
-        //             }
-        //         });
-        //     }
-        //     this.inputVisibleTag = false;
-        //     this.inputValueTag = '';
-        // },
-        // handleCloseCategory(category) {
-        //     this.categorys.splice(this.categorys.indexOf(category), 1);
-        // },
-        // showInputCategory() {
-        //     this.inputVisibleCategory = true;
-        //     this.$nextTick((_) => {
-        //         this.$refs.saveInputCategory.$refs.input.focus();
-        //     });
-        // },
-        // handleInputConfirmCategory() {
-        //     const _this = this;
-        //     let category_name = this.inputValueCategory;
-        //     let data = {
-        //         category_name
-        //     };
-        //     if (category_name) {
-        //         //先判断是否有这个分类，如果有，则返回对应的id和name
-        //         this.$axios.get('/getCateGoryByName/' + category_name).then((res) => {
-        //             if (res.data.code === 200) {
-        //                 _this.categorys.push(res.data.data);
-        //                 this.$message.success('添加分类成功');
-        //             } else {
-        //                 _this.$axios
-        //                     .post('/admin/saveCategory', data, {
-        //                         headers: {
-        //                             Authorization: localStorage.getItem('token')
-        //                         }
-        //                     })
-        //                     .then((res) => {
-        //                         let newCategory = {
-        //                             category_id: res.data.data,
-        //                             category_name: category_name
-        //                         };
-        //                         _this.categorys.push(newCategory);
-        //                         this.$message.success('添加分类成功');
-        //                     })
-        //                     .catch((err) => {
-        //                         this.$message.error('不要再试了哦，没有权限');
-        //                     });
-        //             }
-        //         });
-            // }
-        //     this.inputVisibleCategory = false;
-        //     this.inputValueCategory = '';
-        // },
-        
+
         // 上传前校验格式
         onBeforeUploadImage(file) {
             const isIMAGE = file.type === 'image/jpeg' || 'image/jpg' || 'image/png';
-            const isLt1M = file.size / 1024 /1024 < 10;
+            const isLt1M = file.size / 1024 / 1024 < 10;
             if (!isIMAGE) {
                 this.$message.error('上传文件只能是图片格式!');
             }
@@ -362,7 +254,9 @@ export default {
             const formData = new FormData();
             formData.append('blog_img', param.file);
             this.$axios
-                .post('/admin/uploadImg', formData
+                .post(
+                    '/admin/uploadImg',
+                    formData
                     // headers: {
                     //     Authorization: localStorage.getItem('token')
                     // }

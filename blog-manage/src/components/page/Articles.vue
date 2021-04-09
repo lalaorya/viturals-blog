@@ -170,7 +170,7 @@ export default {
                             }
                         })
                         .catch(err => {
-                            this.$message.error('不要再试了哦，没有权限');
+                            this.$message.error('权限不足,请联系管理员');
                         });
                 })
                 .catch(() => {});

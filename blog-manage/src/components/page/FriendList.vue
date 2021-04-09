@@ -2,62 +2,44 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-addressbook"></i> 友情链接
-                </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-addressbook"></i> 友情链接 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                    type="primary"
-                    icon="el-icon-plus"
-                    class="handle-plus mr10"
-                    @click="handleAdd"
-                >添加友链</el-button>
+                <el-button type="primary" icon="el-icon-plus" class="handle-plus mr10" @click="handleAdd">添加友链</el-button>
                 <el-input v-model="query.link_name" placeholder="站点名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="primary" icon="el-icon-refresh" @click="refreshData">重置</el-button>
             </div>
             <el-table :data="friendList" border class="table" header-cell-class-name="table-header">
-                <el-table-column prop="link_id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="link_name" label="站点名称"></el-table-column>
+                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="name" label="站点名称"></el-table-column>
                 <el-table-column label="站点描述">
-                    <template slot-scope="scope">{{scope.row.link_info}}</template>
+                    <template slot-scope="scope">{{ scope.row.info }}</template>
                 </el-table-column>
                 <el-table-column label="站点图标" align="center">
                     <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.avatar"
-                            :preview-src-list="[scope.row.avatar]"
-                        ></el-image>
+                        <el-image class="table-td-thumb" :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"></el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="link_url" label="站点链接"></el-table-column>
-                <el-table-column property="status" align="center" label="友链状态">
+                <el-table-column prop="url" label="站点链接"></el-table-column>
+                <el-table-column align="center" property="isCheck" label="友链状态">
                     <template slot-scope="scope">
                         <el-switch
                             :active-value="1"
                             :inactive-value="0"
-                            v-model="scope.row.status"
-                            @change="changeStatus(scope.$index,scope.row)"
+                            v-model="scope.row.isCheck"
+                            @change="changeStatus(scope.$index, scope.row)"
                         ></el-switch>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
-                        >删除</el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
+                            >删除</el-button
+                        >
                     </template>
                 </el-table-column>
             </el-table>
@@ -77,13 +59,13 @@
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="friendform" :model="friendform" label-width="70px">
                 <el-form-item label="站点名称">
-                    <el-input v-model="friendform.link_name"></el-input>
+                    <el-input v-model="friendform.name"></el-input>
                 </el-form-item>
                 <el-form-item label="站点网址">
-                    <el-input v-model="friendform.link_url"></el-input>
+                    <el-input v-model="friendform.url"></el-input>
                 </el-form-item>
                 <el-form-item label="站点描述">
-                    <el-input v-model="friendform.link_info"></el-input>
+                    <el-input v-model="friendform.info"></el-input>
                 </el-form-item>
                 <el-form-item label="站点图标">
                     <el-input v-model="friendform.avatar"></el-input>
@@ -108,12 +90,12 @@ export default {
             },
             editVisible: false,
             friendform: {
-                link_id: '',
-                link_name: '',
-                link_url: '',
-                link_info: '',
+                id: '',
+                name: '',
+                url: '',
+                info: '',
                 avatar: '',
-                status: ''
+                isCheck: ''
             },
 
             friendList: [],
@@ -131,24 +113,21 @@ export default {
         getData(currentPage) {
             const _this = this;
             this.$axios
-                .get('/admin/friendsList', {
+                .get('/admin/friends/list', {
                     params: {
                         currentPage: currentPage
-                    },
-                    headers: {
-                        Authorization: localStorage.getItem('token')
                     }
                 })
-                .then(res => {
-                    _this.friendList = res.data.data;
-                    _this.currentPage = res.data.currentPage;
-                    _this.total = res.data.totalPage;
+                .then((res) => {
+                    _this.friendList = res.data.data.records;
+                    _this.currentPage = res.data.data.current;
+                    _this.total = res.data.data.pages;
                 });
         },
         // 触发搜索按钮
         handleSearch() {
             const _this = this;
-            this.$axios.get('/queryFriend/' + _this.query.link_name).then(res => {
+            this.$axios.get('/queryFriend/' + _this.query.link_name).then((res) => {
                 if (res.data.code == 200) {
                     this.$message.success(res.data.msg);
                     _this.friendList = res.data.data;
@@ -165,15 +144,12 @@ export default {
             })
                 .then(() => {
                     this.$axios
-                        .delete('/admin/deleteFriend', {
+                        .get('/admin/friends/delete', {
                             params: {
-                                link_id: row.link_id
-                            },
-                            headers: {
-                                Authorization: localStorage.getItem('token')
+                                id: row.id
                             }
                         })
-                        .then(res => {
+                        .then((res) => {
                             if (res.data.code == 200) {
                                 this.$message.success(res.data.msg);
                                 this.reload();
@@ -181,7 +157,7 @@ export default {
                                 this.$message.error(res.data.msg);
                             }
                         })
-                        .catch(err => {
+                        .catch((err) => {
                             this.$message.error('不要再试了哦，没有权限');
                         });
                 })
@@ -189,22 +165,20 @@ export default {
         },
         // 编辑操作
         handleEdit(index, row) {
+            // 把当前行的数据赋值给frendform
             this.friendform = row;
             this.isAdd = false;
             this.editVisible = true;
         },
-        // 保存编辑
+        // 保存方法
         saveEdit() {
             const _this = this;
-            //修改友链
+            //编辑友链
             if (!_this.isAdd) {
                 this.$axios
-                    .put('/admin/updateFriend', _this.friendform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
+                    .post('/admin/friends/update', _this.friendform, {
                     })
-                    .then(res => {
+                    .then((res) => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
                             this.reload();
@@ -212,18 +186,15 @@ export default {
                             this.$message.error(res.data.msg);
                         }
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         this.$message.error('不要再试了哦，没有权限');
                     });
             } else {
                 //添加友链
                 this.$axios
-                    .post('/admin/saveFriend', _this.friendform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
+                    .post('/admin/friends/save', _this.friendform, {
                     })
-                    .then(res => {
+                    .then((res) => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
                             this.reload();
@@ -231,7 +202,7 @@ export default {
                             this.$message.error(res.data.msg);
                         }
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         this.$message.error('不要再试了哦，没有权限');
                     });
             }
@@ -239,31 +210,31 @@ export default {
         },
         //添加操作
         handleAdd() {
+            // 初始化form
             this.friendform = {
-                link_name: '',
-                link_url: '',
-                link_info: '',
+                id:'',
+                name: '',
+                url: '',
+                info: '',
                 avatar: '',
-                status: ''
+                isCheck: ''
             };
             this.isAdd = true;
             this.editVisible = true;
         },
+        // 更新友链状态
         changeStatus(index, row) {
             const _this = this;
-            const link_id = row.link_id;
-            const status = row.status;
+            const id = row.id;
+            const status = row.isCheck;
             const params = {
-                link_id,
+                id,
                 status
             };
             this.$axios
-                .put('/admin/updateFriStatus', params, {
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
-                })
-                .then(res => {
+                .post('/admin/friends/status', params, 
+                )
+                .then((res) => {
                     if (res.data.code == 200) {
                         this.$message.success(res.data.msg);
                         this.reload();
@@ -271,7 +242,7 @@ export default {
                         this.$message.error(res.data.msg);
                     }
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.$message.error('不要再试了哦，没有权限');
                 });
         },

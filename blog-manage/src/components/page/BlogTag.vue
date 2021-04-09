@@ -20,8 +20,8 @@
                 <el-button type="primary" icon="el-icon-refresh" @click="refreshData">重置</el-button>
             </div>
             <el-table :data="tagList" border class="table" header-cell-class-name="table-header">
-                <el-table-column prop="tag_id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="tag_name" label="标签名称"></el-table-column>
+                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="name" label="标签名称"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -54,7 +54,7 @@
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="tagform" :model="tagform" label-width="70px">
                 <el-form-item label="标签名称">
-                    <el-input v-model="tagform.tag_name"></el-input>
+                    <el-input v-model="tagform.name"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -76,8 +76,8 @@ export default {
             },
             editVisible: false,
             tagform: {
-                tag_id: null,
-                tag_name: ''
+                id: null,
+                name: ''
             },
             tagList: [],
             currentPage: 1,
@@ -93,18 +93,15 @@ export default {
         getData(currentPage) {
             const _this = this;
             this.$axios
-                .get('/admin/tagList', {
+                .get('/admin/tag/listPage', {
                     params: {
                         currentPage: currentPage
                     },
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
                 })
                 .then(res => {
-                    _this.tagList = res.data.data;
-                    _this.currentPage = res.data.currentPage;
-                    _this.total = res.data.totalPage;
+                    _this.tagList = res.data.data.records;
+                    _this.currentPage = res.data.data.current;
+                    _this.total = res.data.data.pages;
                 });
         },
         // 触发搜索按钮
@@ -129,13 +126,10 @@ export default {
             })
                 .then(() => {
                     this.$axios
-                        .delete('/admin/deleteTag', {
+                        .delete('/admin/tag/delete', {
                             params: {
-                                tag_id: row.tag_id
+                                id: row.id
                             },
-                            headers: {
-                                Authorization: localStorage.getItem('token')
-                            }
                         })
                         .then(res => {
                             if (res.data.code == 200) {
@@ -163,11 +157,7 @@ export default {
             //修改标签
             if (!_this.isAdd) {
                 this.$axios
-                    .put('/admin/updateTag', _this.tagform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .post('/admin/tag/update', _this.tagform, )
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -182,11 +172,7 @@ export default {
             } else {
                 //添加标签
                 this.$axios
-                    .post('/admin/saveTag', _this.tagform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .post('/admin/tag/save', _this.tagform,)
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -204,7 +190,8 @@ export default {
         //添加操作
         handleAdd() {
             this.tagform = {
-                tag_name: ''
+                id:null,
+                name: ''
             };
             this.isAdd = true;
             this.editVisible = true;

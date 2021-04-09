@@ -29,8 +29,8 @@
                 class="table"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="category_id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="category_name" label="分类名称"></el-table-column>
+                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="name" label="分类名称"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -63,7 +63,7 @@
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="categoryform" :model="categoryform" label-width="70px">
                 <el-form-item label="分类名称">
-                    <el-input v-model="categoryform.category_name"></el-input>
+                    <el-input v-model="categoryform.name"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -85,8 +85,8 @@ export default {
             },
             editVisible: false,
             categoryform: {
-                category_id: null,
-                category_name: ''
+                id: null,
+                name: ''
             },
             categoryList: [],
             currentPage: 1,
@@ -102,18 +102,15 @@ export default {
         getData(currentPage) {
             const _this = this;
             this.$axios
-                .get('/admin/categoryList', {
+                .get('/admin/category/listPage', {
                     params: {
                         currentPage: currentPage
                     },
-                    headers: {
-                        Authorization: localStorage.getItem('token')
-                    }
                 })
                 .then(res => {
-                    _this.categoryList = res.data.data;
-                    _this.currentPage = res.data.currentPage;
-                    _this.total = res.data.totalPage;
+                    _this.categoryList = res.data.data.records;
+                    _this.currentPage = res.data.data.current;
+                    _this.total = res.data.data.pages;
                 });
         },
         // 触发搜索按钮
@@ -138,13 +135,10 @@ export default {
             })
                 .then(() => {
                     this.$axios
-                        .delete('/admin/deleteCategory', {
+                        .delete('/admin/category/delete', {
                             params: {
-                                category_id: row.category_id
+                                id: row.id
                             },
-                            headers: {
-                                Authorization: localStorage.getItem('token')
-                            }
                         })
                         .then(res => {
                             if (res.data.code == 200) {
@@ -172,11 +166,7 @@ export default {
             //修改分类
             if (!_this.isAdd) {
                 this.$axios
-                    .put('/admin/updateCategory', _this.categoryform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .post('/admin/category/update', _this.categoryform)
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -191,11 +181,7 @@ export default {
             } else {
                 //添加分类
                 this.$axios
-                    .post('/admin/saveCategory', _this.categoryform, {
-                        headers: {
-                            Authorization: localStorage.getItem('token')
-                        }
-                    })
+                    .post('/admin/category/save', _this.categoryform)
                     .then(res => {
                         if (res.data.code == 200) {
                             this.$message.success(res.data.msg);
@@ -213,7 +199,7 @@ export default {
         //添加操作
         handleAdd() {
             this.categoryform = {
-                category_name: ''
+                name: ''
             };
             this.isAdd = true;
             this.editVisible = true;

@@ -40,8 +40,8 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-comment grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{commentCnt}}</div>
-                                    <div>评论总数</div>
+                                    <div class="grid-num">{{pv}}</div>
+                                    <div>访问量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -51,8 +51,8 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-lx-like grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{momentCnt}}</div>
-                                    <div>动态总数</div>
+                                    <div class="grid-num">{{uv}}</div>
+                                    <div>访客数</div>
                                 </div>
                             </div>
                         </el-card>
@@ -107,8 +107,8 @@ export default {
                 introduction: ''
             },
             blogCount: 0,
-            commentCnt: 0,
-            momentCnt: 0,
+            pv: 0,
+            uv: 0,
             blogArticles: []
         };
     },
@@ -126,9 +126,8 @@ export default {
             this.user.role = this.$store.getters.getUser.role;
             this.user.introduction = this.$store.getters.getUser.introduction;
             this.getBlogCnt();
-            this.getMomentCnt();
             this.getNewBlog();
-            this.getCommentCnt();
+            this.getPUCnt();
         }
     },
     // activated() {
@@ -151,37 +150,24 @@ export default {
                 }
             });
         },
-        // 获取评论总数
-        getCommentCnt() {
+        // 获取访问量和访客数
+        getPUCnt() {
             const _this = this;
             this.$axios
-                .get('/admin/comment/count', {
-                    // headers: {
-                    //     Authorization: localStorage.getItem('token')
-                    // }
-                })
+                .get('/admin/visitCount/count')
                 .then(res => {
                     if (res.data.code == 200) {
                         //this.$message.success(res.data.msg);
                         // console.log(res.data)
-                        _this.commentCnt = res.data.data;
+                        _this.pv = res.data.data.pv;
+                        _this.uv=res.data.data.uv;
+                        console.log(_this.pv);
                     } else {
                         this.$message.error(res.data.msg);
                     }
                 });
         },
-        // 获取动态总数
-        getMomentCnt() {
-            const _this = this;
-            this.$axios.get('/admin/moment/count').then(res => {
-                if (res.data.code == 200) {
-                    //this.$message.success(res.data.msg);
-                    _this.momentCnt = res.data.data;
-                } else {
-                    this.$message.error(res.data.msg);
-                }
-            });
-        },
+
         // 获取最新博客 第一页 每页五条
         getNewBlog() {
             const _this = this;

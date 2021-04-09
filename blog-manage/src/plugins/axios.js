@@ -2,7 +2,8 @@ import axios from 'axios'
 import router from '@/router'
 import Element from "element-ui"
 // axios.defaults.baseURL = 'https://api.datealive.top'
-axios.defaults.baseURL = 'http://localhost:8050'
+axios.defaults.baseURL = 'http://47.119.115.60:8089'
+// axios.defaults.baseURL = 'http://localhost:8089'
 // axios.defaults.withCredentials = true
 // axios.defaults.crossDomain = true;
 import {Message} from "element-ui"
@@ -50,30 +51,28 @@ axios.interceptors.response.use(response => {
     }
 },
     error => {
-       console.log('err==>' + error.response)// for debug
+        // console.log(response.data);
+       console.log(error)// for debug
             // if (error.response.status === 400) {
             //     // store.commit('REMOVE_INFO');
             //     router.push({
             //         path: '/login'
             //     });
-                // Message({
-                //     message: "用户名错误",
-                //     type: 'error',
-                //     // 显示时间两秒
-                //     duration: 2 * 1000
-                // })
+            //     Message({
+            //         message: "用户名错误",
+            //         type: 'error',
+            //         // 显示时间两秒
+            //         duration: 2 * 1000
+            //     })
             //     error.message = '请重新登录';
             // }
-            // if (error.response.status === 403) {
-            //     error.message = '权限不足，无法访问';
-            // }
             // 弹窗异常信息
-            Message({
-                message: Message.error(error.data),
-                type: 'error',
-                // 显示时间两秒
-                duration: 2 * 1000
-            })
+            // Message({
+            //     message: "请联系管理员",
+            //     type: 'error',
+            //     // 显示时间两秒
+            //     duration: 2 * 1000
+            // })
              
         return Promise.reject(error)
     })

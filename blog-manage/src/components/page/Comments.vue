@@ -20,7 +20,7 @@
                 class="table"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="comment_id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="nick_name" label="评论者"></el-table-column>
                 <el-table-column label="评论内容" width="200">
                     <template slot-scope="scope">{{scope.row.content}}</template>

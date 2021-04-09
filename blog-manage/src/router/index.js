@@ -5,6 +5,7 @@ Vue.use(Router);
 
 export default new Router({
     mode: 'history',
+    base:'/admin',
     routes: [
         {
             path: '/',
@@ -60,6 +61,12 @@ export default new Router({
                     meta: { title: '分类目录', requireAuth: true  }
                 },
                 {
+                    path: '/users',
+                    name:'users',
+                    component: () => import(/* webpackChunkName: "category" */ '../components/page/UserManage.vue'),
+                    meta: { title: '用户管理', requireAuth: true  }
+                },
+                {
                     path: '/comments',
                     name:'comments',
                     component: () => import(/* webpackChunkName: "category" */ '../components/page/Comments.vue'),
@@ -112,7 +119,17 @@ export default new Router({
                     name:'404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' , requireAuth: true }
+                },
+
+                {
+                    path: '/sql',
+                    // redirect:'/www.baidu.com',
+                    name:'sql',
+                    component: () => import(/* webpackChunkName: "404" */ '../components/page/Sql.vue'),
+                    meta: { title: 'sql' , requireAuth: true }
                 }
+
+
             ]
         },
         {

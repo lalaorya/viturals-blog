@@ -2,8 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
-import './assets/css/theme-green/index.css'; // 浅绿色主题
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
+// import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
@@ -13,6 +15,8 @@ import './permission.js' // 路由拦截
 import axios from '@/plugins/axios'
 
 Vue.prototype.$axios = axios //
+
+Vue.use(mavonEditor)
 
 
 Vue.config.productionTip = false;

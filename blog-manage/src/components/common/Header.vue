@@ -7,15 +7,15 @@
             <i v-else class="el-icon-circle-plus-outline"></i>
         </div>
         <div class="logo">Blog后台管理系统</div>
-        <div class="myPower">因为孤独而沉寂 又因沉寂而强大🤺🤺🤺</div>
+        <div class="myPower"></div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 动态和私信 -->
                 <div class="user-advice">
-                    <el-badge :value="1" class="item" type="primary">
+                    <el-badge :value="1" class="item" type="success">
                         <el-button size="small">动态</el-button>
                     </el-badge>
-                    <el-badge :value="2" class="item" type="warning">
+                    <el-badge :value="1" class="item" type="success">
                         <el-button size="small">私信</el-button>
                     </el-badge>
                 </div>
@@ -49,7 +49,6 @@
                 </el-dropdown>
             </div>
         </div>
-        
 
         <el-dialog title="修改密码" :visible.sync="dialogFormVisible" width="40%">
             <el-form :model="form" :rules="rules" ref="form">
@@ -130,20 +129,20 @@ export default {
     methods: {
         // 注销方法
         handleCommand(command) {
-            // if (command == 'logout') {
-                const _this = this;
-                this.$axios
-                    .get('http://localhost:8050/admin/logout', {
-                        // headers: {
-                        //     "Authorization":localStorage.getItem('token')
-                        // }
-                    })
-                    .then((res) => {
-                        _this.$message.success('退出成功');
-                        _this.$store.commit('REMOVE_INFO');
-                        _this.$router.push('/login');
-                    });
-            // }
+            if (command == 'logout') {
+            const _this = this;
+            this.$axios
+                .get('admin/logout', {
+                    // headers: {
+                    //     "Authorization":localStorage.getItem('token')
+                    // }
+                })
+                .then((res) => {
+                    _this.$message.success('退出成功');
+                    _this.$store.commit('REMOVE_INFO');
+                    _this.$router.push('/login');
+                });
+            }
         },
         // 侧边栏折叠
         collapseChage() {
@@ -180,7 +179,6 @@ export default {
             this.fullscreen = !this.fullscreen;
         },
         openDialog() {
-            //this.$router.push('/login');
             this.dialogFormVisible = true;
         },
         //修改密码
@@ -204,9 +202,7 @@ export default {
                                 message: res.data.msg,
                                 type: 'success'
                             });
-                            _this.$message.success('退出成功');
-                            _this.$store.commit('REMOVE_INFO');
-                            _this.$router.push('/login');
+  
                         })
                         .catch((err) => {
                             this.$message.error('不要再试了哦，没有权限');
@@ -232,6 +228,10 @@ export default {
             this.user.avatar = this.$store.getters.getUser.avatar;
             // console.log(this.$store.getters.getUser.username);
         }
+    },
+    advice2() {
+        console.log(aaa);
+        this.$message.error('尚未开发');
     }
 };
 </script>
@@ -317,14 +317,14 @@ export default {
     color: goldenrod;
 }
 
-.user-advice{
-    padding:20px;
+.user-advice {
+    padding: 20px;
     float: right;
     /* line-height: 70px; */
 }
 
 .item {
-  /* margin-top: 10px; */
-  margin-right: 20px;
+    /* margin-top: 10px; */
+    margin-right: 20px;
 }
 </style>

@@ -18,23 +18,13 @@
                             <span slot="title">{{ item.title }}</span>
                         </template>
                         <template v-for="subItem in item.subs">
-                            <el-submenu
-                                v-if="subItem.subs"
-                                :index="subItem.index"
-                                :key="subItem.index"
-                            >
+                            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
                                 <template slot="title">{{ subItem.title }}</template>
-                                <el-menu-item
-                                    v-for="(threeItem,i) in subItem.subs"
-                                    :key="i"
-                                    :index="threeItem.index"
-                                >{{ threeItem.title }}</el-menu-item>
+                                <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">{{
+                                    threeItem.title
+                                }}</el-menu-item>
                             </el-submenu>
-                            <el-menu-item
-                                v-else
-                                :index="subItem.index"
-                                :key="subItem.index"
-                            >{{ subItem.title }}</el-menu-item>
+                            <el-menu-item v-else :index="subItem.index" :key="subItem.index">{{ subItem.title }}</el-menu-item>
                         </template>
                     </el-submenu>
                 </template>
@@ -97,11 +87,19 @@ export default {
                     title: '分类目录'
                 },
                 {
-                    icon: 'el-icon-chat-dot-round',
-                    index: 'comments',
-                    title: '评论管理'
+                    icon: 'el-icon-user-solid',
+                    index: 'users',
+                    title: '用户管理'
                 },
-                 {
+                // 评论系统使用valite实现，不需要这个了
+                // 我只删了这里，路由和comment页面还在，以后或许会用到
+                // {
+                //     icon: 'el-icon-chat-dot-round',
+                //     index: 'comments',
+                //     title: '评论管理'
+                // },
+
+                {
                     icon: 'el-icon-tickets',
                     index: '7',
                     title: '站点管理',
@@ -112,33 +110,40 @@ export default {
                         }
                     ]
                 },
+
                 {
-                    icon: 'el-icon-tickets',
-                    index: '8',
-                    title: '日志管理',
-                    subs: [
-                        {
-                            index: 'joblogs',
-                            title: '任务日志'
-                        },
-                        {
-                            index: 'loginlogs',
-                            title: '登录日志'
-                        },
-                        {
-                            index: 'operationlogs',
-                            title: '操作日志'
-                        },
-                        {
-                            index: 'errorlogs',
-                            title: '异常日志'
-                        },
-                        {
-                            index: 'vistorlogs',
-                            title: '访问日志'
-                        }
-                    ]
-                }
+                    icon: 'el-icon-pie-chart',
+                    index: 'sql',
+                    title: 'SQL监控',
+                },
+
+                // {
+                //     icon: 'el-icon-tickets',
+                //     index: '8',
+                //     title: '日志管理',
+                //     subs: [
+                //         {
+                //             index: 'joblogs',
+                //             title: '任务日志'
+                //         },
+                //         {
+                //             index: 'loginlogs',
+                //             title: '登录日志'
+                //         },
+                //         {
+                //             index: 'operationlogs',
+                //             title: '操作日志'
+                //         },
+                //         {
+                //             index: 'errorlogs',
+                //             title: '异常日志'
+                //         },
+                //         {
+                //             index: 'vistorlogs',
+                //             title: '访问日志'
+                //         }
+                //     ]
+                // }
             ]
         };
     },
@@ -149,7 +154,7 @@ export default {
     },
     created() {
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-        bus.$on('collapse', msg => {
+        bus.$on('collapse', (msg) => {
             this.collapse = msg;
             bus.$emit('collapse-content', msg);
         });

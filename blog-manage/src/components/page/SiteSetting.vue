@@ -106,7 +106,8 @@ export default {
         };
     },
     created() {
-        this.getData();
+        this.$message.warning("尚未开发")
+        // this.getData();
     },
     methods: {
         getData() {

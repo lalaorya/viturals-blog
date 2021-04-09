@@ -26,8 +26,8 @@ export default {
     data: function () {
         return {
             loginForm: {
-                username: '',
-                password: ''
+                username: 'admin',
+                password: 'admin'
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -42,7 +42,7 @@ export default {
             this.$refs.login.validate((valid) => {
                 if (valid) {
                     // 发送请求
-                    this.$axios.post('http://localhost:8050/admin/login', this.loginForm).then((res) => {
+                    this.$axios.post('/admin/login', this.loginForm).then((res) => {
                         // 请求后端,如果返回为400,会被axios自动拦截,那里有拦截方法
                         _this.$message.success('登录成功');
                         const token = res.headers['authorization'];
@@ -80,9 +80,9 @@ export default {
     width: 100%;
     line-height: 50px;
     text-align: center;
-    font-size: 20px;
-    color: #fff;
-    border-bottom: 1px solid #ddd;
+    font-size: 22px;
+    color: rgb(31, 27, 27);
+    border-bottom: 1px solid rgb(10, 245, 30);
 }
 .ms-login {
     position: absolute;
@@ -91,7 +91,7 @@ export default {
     width: 350px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.5);
     overflow: hidden;
 }
 .ms-content {

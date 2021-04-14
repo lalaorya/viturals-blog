@@ -30,12 +30,12 @@ export default {
   name: "SiteFooter",
   data() {
     return {
-      uv: "2185",
-      pv: "759",
+      uv: 0,
+      pv: 0,
     };
   },
   created() {
-    this.getPVUV();
+    // this.getPVUV();
     // 因为每个路由页面都有footer这个组件。因此在这个组件搞了一个方法来统计当前访问量和访客量
     // 访问量：一天之内，只要这个ip访问了多少个页面
     // 访客量：一天之内，一个ip只能是一个访客
@@ -43,23 +43,18 @@ export default {
     this.commitPVUV(this.$route.path);
   },
   methods: {
-    getPVUV() {
-      const _this = this;
-      this.$axios.get("getPVUV").then((res) => {
-        _this.uv = res.data.data.uv;
-        _this.pv = res.data.data.pv;
-        console.log(_this.uv);
-
-        // _this.pagination.currentPage=res.data.data.current;
-      });
-    },
 
     commitPVUV(myroute) {
       const _this = this;
       this.$axios.get("statisUP?route=" + myroute).then(res => {
+        console.log(res.data.data);
         _this.uv = res.data.data.uv;
         _this.pv = res.data.data.pv;
-        // _this.pagination.currentPage=res.data.data.current;
+        console.log(111111);
+        console.log(_this.pv);
+      })
+      .catch((err) => {
+        
       });
     },
   },

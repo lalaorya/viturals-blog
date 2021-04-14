@@ -34,7 +34,7 @@
 3. 安装前端前台client项目相关依赖，使用`npm install`命令
 4. 安装前端博客管理manage项目相关依赖，使用`npm install`命令
 5. 启动后端springBoot系统
-6. 自行修改
+6. 自行修改数据库和redis的配置
 7. 在`blog-client`模块下执行命令`npm run serve`
 8. 在`blog-manage`模块下执行命令`npm run serve`
 
@@ -42,55 +42,55 @@
 
 - 前台
 
-  ![image-20210414153514137](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414153514137.png)
+  ![image-20210414153514137](https://i.loli.net/2021/04/14/b5D1fehEQvGgs8o.png)
 
   ----
 
-  <img src="C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414153247179.png" alt="image-20210414153247179" style="zoom:120%;" />
+  <img src="https://i.loli.net/2021/04/14/tip2wXug3MSKNcP.png" alt="image-20210414153247179" style="zoom:120%;" />
 
   ----
 
-  ![image-20210414203904663](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414203904663.png)
+  ![image-20210414203904663](https://i.loli.net/2021/04/14/eqj6iLPtSrJWcVE.png)
 
   ---
 
-  ![image-20210414153406327](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414153406327.png)
+  ![image-20210414153406327](https://i.loli.net/2021/04/14/D4IjYfr1Ls8xPuh.png)
 
   ---
 
-  ![image-20210414153430066](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414153430066.png)
+  ![image-20210414153430066](https://i.loli.net/2021/04/14/G2VXnv1biuAgyFR.png)
 
 - 后台管理系统：
 
-  ![image-20210414202751773](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202751773.png)
+  ![image-20210414202751773](https://i.loli.net/2021/04/14/WKvOgzU2rj8yBJq.png)
 
   ----
 
-  ![image-20210414202813443](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202813443.png)
+  ![image-20210414202813443](https://i.loli.net/2021/04/14/yXOKqYCJT9DwVQE.png)
 
   ---
 
-  ![image-20210414202839748](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202839748.png)
+  ![image-20210414202839748](https://i.loli.net/2021/04/14/gh7TMekuJ4a6fVc.png)
 
   ---
 
-  ![image-20210414202854866](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202854866.png)
+  ![image-20210414202854866](https://i.loli.net/2021/04/14/jpKOnJv15l6fk4C.png)
 
   ----
 
-  ![image-20210414202910849](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202910849.png)
+  ![image-20210414202910849](https://i.loli.net/2021/04/14/XpDqFfKnZztEdLB.png)
 
   ---
 
-  ![image-20210414202926520](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202926520.png)
+  ![image-20210414202926520](https://i.loli.net/2021/04/14/iRFLAq9zZcH6sUf.png)
 
   ---
 
-  ![image-20210414202940449](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414202940449.png)
+  ![image-20210414202940449](https://i.loli.net/2021/04/14/RwsZSmNxdEeg16W.png)
 
   ---
 
-  ![image-20210414203001704](C:%5CDocuments(%E8%B5%84%E6%96%99)%5CLearning%5C%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E5%B0%8F%E6%B2%88%5Cimg%5Cimage-20210414203001704.png)
+  ![image-20210414203001704](https://i.loli.net/2021/04/14/2iy1rkacFSRHt7d.png)
 
 ## 尚未完成的功能
 

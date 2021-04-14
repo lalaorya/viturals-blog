@@ -42,9 +42,9 @@ spring:
 
 
   redis:
-    host: 47.119.115.60
+    host: 127.0.0.1
     port: 6379
-#    password: 123abc
+    password: 123abc
 
 # 日志配置
 logging:

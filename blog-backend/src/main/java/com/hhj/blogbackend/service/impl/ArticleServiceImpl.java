@@ -193,8 +193,8 @@ public class ArticleServiceImpl  extends ServiceImpl<ArticleMapper,Article> impl
 
     @Override
     public boolean addReadNum(Article article) {
-        String key="post:viewCount:"+article.getId();
-        Integer ViewCount = (Integer) redisUtil.hget(key, "post:viewCount");
+        String key="article:viewCount:"+article.getId();
+        Integer ViewCount = (Integer) redisUtil.get(key);
 //        System.out.println(ViewCount);
         //判断redis中是否有当前文章的浏览量
         //
@@ -202,27 +202,21 @@ public class ArticleServiceImpl  extends ServiceImpl<ArticleMapper,Article> impl
         if(ViewCount!=null){
             article.setReadNum(ViewCount+1);
         }else{
-            log.info("一个人浏览了");
             article.setReadNum(article.getReadNum()+1);
         }
-        boolean hSetViewCount = redisUtil.hset(key, "post:viewCount", article.getReadNum());
-        if(hSetViewCount){
-            return true;
-        }else{
-            return false;
-        }
 
-
+        boolean set = redisUtil.set(key, article.getReadNum());
+        return set;
     }
 
     @Override
     public void getReadNumFromRedis(ArticleInfo articleInfo) {
-        String key="post:viewCount:"+articleInfo.getId();
-        Integer ViewCount = (Integer) redisUtil.hget(key, "post:viewCount");
+        String key="article:viewCount:"+articleInfo.getId();
+        Integer ViewCount = (Integer) redisUtil.get(key);
         if(ViewCount!=null){
             articleInfo.setReadNum(ViewCount);
         }else{
-            redisUtil.hset(key, "post:viewCount", articleInfo.getReadNum());
+            redisUtil.set(key, articleInfo.getReadNum());
         }
 
     }

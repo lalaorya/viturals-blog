@@ -50,8 +50,6 @@ public class UserRealm extends AuthorizingRealm {
 //        String jwtToken = (String) authenticationToken.getPrincipal();
         JwtToken jwtToken = (JwtToken) authenticationToken;
         log.info("!!!!!!!!!!!!!!!");
-        // 怎么得到userid的，有疑惑
-        // 通过token可以获取id？似乎真可以阿
         String userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).getSubject();
         System.out.println(userId);
         System.out.println(userId+"-------------------------");

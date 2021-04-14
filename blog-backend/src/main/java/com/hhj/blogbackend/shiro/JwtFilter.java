@@ -60,6 +60,9 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
     @Override
+    /**
+     * 登录失败后
+     */
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
 
         HttpServletResponse response1 = (HttpServletResponse) response;

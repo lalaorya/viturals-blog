@@ -1,6 +1,7 @@
 <template>
   <div>
-    <iframe src="http://localhost:8089/druid/sql.html" id="mobsf" frameborder="0" style="position:absolute;"></iframe>
+    <!-- <iframe src="http://localhost:8089/druid/sql.html" id="mobsf" frameborder="0" style="position:absolute;"></iframe> -->
+    <iframe src="http://47.119.115.60:8089/druid/index.html" id="mobsf" frameborder="0" style="position:absolute;"></iframe>
   </div>
 </template>
 

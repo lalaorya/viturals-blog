@@ -4,7 +4,7 @@
 
 前端有两个项目，一个是前台项目，一个是后台管理系统，使用`vue`开发。后端有一个项目，使用`SpringBoot`开发，持久层使用`MyBati-Plus`框架，认证授权使用`Shiro`，缓存使用`Redis`.
 
-前端模板来自 [zcblog](https://github.com/progzc/zcblog)，在此基础上做了部分修改，特此感谢
+前端模板来自 [zcblog](https://github.com/progzc/zcblog)，在此基础上做了部分修改，特此感谢~
 
 目前本站还在开发中，并不是稳定版本，后续会陆续修复~
 

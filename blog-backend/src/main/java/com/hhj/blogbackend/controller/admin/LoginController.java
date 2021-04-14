@@ -42,6 +42,15 @@ public class LoginController {
             return Result.fail(400,"用户名或密码错误",null);
         }
 //        Assert.notNull(user,"用户不存在");// 不需要进行断言
+        /**
+         * 由于我们前端的代码没有加密传输，因此这部分的实现显得不合理
+         * 正确的逻辑是：
+         *     前端传回加密的用户名和密码，后端解密，数据库校验
+         *  现在的逻辑是：
+         *     前端传输普通的用户名密码，后端对密码加密得到加密后的密码，看加密后的密码是否与数据库中的密码一致
+         *     ps：注册是数据库的密码就是加密过后的密码
+         *  ps：后续再进行优化，现在勉勉强强能跑起来
+         */
         // 否则进行加密
         // 加密内容 加密盐值 加密次数
         String newPassword = new Md5Hash(loginDto.getPassword(), loginDto.getUsername(), 1024).toHex();

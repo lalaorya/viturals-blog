@@ -33,6 +33,9 @@ spring:
         enabled: true   # 开启监控页
 #        login-username: admin
 #        login-password: admin
+        allow:
+        deny:
+
 
       # 配置监控web
       web-stat-filter:

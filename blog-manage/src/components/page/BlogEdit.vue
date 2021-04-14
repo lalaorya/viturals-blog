@@ -196,13 +196,13 @@ export default {
             // _this.blogDetail.cateGory = _this.categorys;
             _this.article.articleStatus = 1;
             // _this.article.content = _this.html;
-            console.log(_this.article);
+            // console.log(_this.article);
             this.$axios
                 .post('/admin/article/saveBlog', _this.article)
                 .then((res) => {
                     if (res.data.code == 200) {
                         this.$message.success(res.data.msg);
-                        // _this.$router.push({ path: '/admin/articles' })
+                        // _this.$router.push({ path: '/admin/articles' })  
                     } else {
                         this.$message.error(res.data.msg);
                     }

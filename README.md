@@ -13,7 +13,7 @@
 ## 相关数据文档：
 
 - 数据库SQL文件：[SQL脚本](https://github.com/sang-Mu/viturals-blog/blob/master/db/blog.sql)
-- ==博客后端开发文档==：[后端开发文档](https://github.com/sang-Mu/viturals-blog/blob/master/backend-docs/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3.md)
+- **博客后端开发文档**：[后端开发文档](https://github.com/sang-Mu/viturals-blog/blob/master/backend-docs/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3.md)
 
 ## 项目预览
 
@@ -95,7 +95,7 @@
 ## 尚未完成的功能
 
 - 博客分类、动态以及友链页面的开发
-- 博客和后台管理系统搜索功能
+- 博客和后台管理系统搜索功能，使用Elastic Search实现
 
 ## 需要完善的地方
 

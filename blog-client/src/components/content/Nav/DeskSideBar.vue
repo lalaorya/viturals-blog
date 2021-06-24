@@ -21,7 +21,7 @@
         >
           <Panel name="1" hide-arrow:true style="padding: 5px 0">
             公告栏😁
-            <div slot="content">本博客使用springboot+vue实现，前后端分离(<a href="http://47.119.115.60/admin/" style="color:#2d8cf0">后台管理系统</a>)。前端模板来自
+            <div slot="content">本博客使用springboot+vue实现，前后端分离(<a href="https://jsdi.top/admin/" style="color:#2d8cf0">后台管理系统</a>)。前端模板来自
               <a href="https://github.com/progzc/zcblog" style="color:#2d8cf0">zcblog</a>，在此基础上做了部分修改，特此感谢
               <br>
               目前本站还在开发中，并不是稳定版本，后续会陆续修复~
@@ -31,7 +31,10 @@
           </Panel>
           <Panel name="2" hide-arrow:true style="padding: 5px 0">
             博客更新内容😎
-            <div slot="content">使用redis实现了本站访客量,访问量以及文章阅读量的统计</div>
+            <div slot="content">✅ 使用 Redis 实现了本站访客量,访问量以及文章阅读量的统计</div>
+            <div slot="content">✅ 配置了 CDN 加速,对后端接口进行 Nginx 反向代理</div>
+            <div slot="content">✅ 更改了部分 CSS 样式,解决了一些 Bug </div>
+
           </Panel>
           <Panel name="3" hide-arrow:true style="padding: 5px 0">
             关于我🙋‍♂️

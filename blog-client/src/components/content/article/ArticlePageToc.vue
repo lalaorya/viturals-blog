@@ -1,6 +1,6 @@
 <template>
 <!-- 真正的目录，自动生成 -->
-  <div class="article-page-toc"></div>
+  <div class="article-page-toc" id="dest-toc"></div>
 </template>
 
 <script type="text/ecmascript-6">

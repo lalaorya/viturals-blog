@@ -2,16 +2,10 @@
   <div class="site-footer">
     <!--侧边栏页脚-->
     <div class="side-bar-footer">
-      <!-- <div class="links">
-        <a href="https://github.com/progzc/zcblog" target="_blank"><span class="iconfont github">&#xe64a;</span></a>
-        <a href="https://gitee.com/progzc" target="_blank"><span class="iconfont gitee">&#xe6d0;</span></a>
-        <a href="#" target="_blank"><span class="iconfont admin">&#xe6ed;</span></a>
-        <a href="#" target="_blank"><span class="iconfont docs">&#xe6f7;</span></a>
-        <a href="http://qhnmn5y5g.hn-bkt.clouddn.com/personal-wx.jpg" target="_blank"><span class="iconfont wx">&#xe601;</span></a>
-      </div> -->
       <div class="copyRight">
         {{ $t("copyright.desc") }}<span>&copy;</span>2021-2022 by
         {{ $t("homeNav.pseudonym") }}
+
       </div>
       <div class="site-static-info">
         <span class="pv"
@@ -21,6 +15,11 @@
           >{{ $t("homeNav.uniqueVisitor") }}&nbsp;&nbsp;&nbsp;{{ uv }}</span
         >
       </div>
+
+      <div class="copyRight">
+        <a href="https://beian.miit.gov.cn/"><span style="color:#2D8CF0">粤ICP备2021079425号</span></a>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -30,8 +29,8 @@ export default {
   name: "SiteFooter",
   data() {
     return {
-      uv: 0,
-      pv: 0,
+      uv: 100,
+      pv: 100,
     };
   },
   created() {
@@ -62,17 +61,23 @@ export default {
 </script>
 
 <style lang="stylus" type="text/stylus" rel="stylesheet/stylus" scoped>
-.site-footer {
+.site-footer { 
   .side-bar-footer {
-    font-size: 0.85rem;
+
+
+    display:flex
+    flex-direction :column
+    justify-content:center
+    padding: 10px 0px 10px 0px
+    font-size: 0.95rem;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 420;
 
     .links {
       text-align: center;
 
       a {
-        color: inherit;
+        color: #2D8CF0;
 
         span {
           font-size: 1.2rem;
@@ -122,23 +127,26 @@ export default {
     }
 
     .copyRight {
-      margin: 5px 0;
+
+      padding: 5px 0px
+      
       text-align: center;
       opacity: 0.7;
     }
 
     .site-static-info {
-      margin-top: 5px;
-      padding-bottom: 5px;
+      padding: 5px 0px
+      // margin-top: 5px;
+      // padding-bottom: 5px;
       text-align: center;
       opacity: 0.7;
 
       .pv {
-        margin-right: 15px;
+        margin-right: 10px;
       }
 
       .uv {
-        margin-left: 15px;
+        margin-left: 10px;
       }
     }
   }

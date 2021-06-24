@@ -2,7 +2,7 @@
 <!-- article.content是html格式的 -->
 <!-- // github的markdown css样式 -->
   <div class="article-page-content markdown-body"  v-html="article.content">
-    <!-- {{article.content}} -->
+    {{article.content}}
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box" v-bind:style="{left:size+'%'}" v-bind:class="{newbox:isActive}">
     <header class="content-header"></header>
     <!--文章内容-->
     <div class="content-container">
@@ -9,9 +9,9 @@
     <div class="common-container">
       <slot name="common"></slot>
     </div>
-    <div class="content-site-footer">
+    <!-- <div class="content-site-footer">
       <site-footer></site-footer>
-    </div>
+    </div> -->
     <transition name="slide-fade">
       <div class="scroll-progress-bar" @click="scroll2Top" v-show="show">
         {{scrollPercent}}
@@ -29,9 +29,25 @@ export default {
   },
   data () {
     return {
+      isActive:false,
+
+      size:20,
+
       show: false,
       scrollPercent: 0
     }
+  },
+  created (){
+    const _this=this;
+    // console.log(_this.$store.getters.getStatus+"8888****");
+    if(_this.$route.name === 'article'){
+      _this.isActive=true
+      _this.size=0;
+    }else{
+      _this.isActive=false
+      _this.size=20;
+    }
+     
   },
   mounted () {
     window.addEventListener('scroll', this.windowScroll)
@@ -63,6 +79,13 @@ export default {
 
 <style lang="stylus" type="text/stylus" rel="stylesheet/stylus" scoped>
   @import '~common/stylus/index.styl'
+  .main-wrapper .newbox
+    width: 100%
+    background-color: #2d76c8;
+    background-image: url(../../assets/img/shadow_light.png),url(../../assets/img/pixels.png);
+    background-position: 0 0,0 0;
+    background-repeat:repeat-x,repeat;
+
   .content-box
     position relative
     left 20%
@@ -77,7 +100,11 @@ export default {
       margin 0 auto
       width 75%
     .content-site-footer
-      display none
+      display block
+      display flex
+      justify-content center
+      position relative
+      bottom 0
     .scroll-progress-bar
       display inline-block
       position fixed

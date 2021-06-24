@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue' // Vue挂载到实例
 import router from './router' // Vue路由
-import store from './store' // Vue状态管理器
+import store from './store/index' // Vue状态管理器
 import VueI18n from 'vue-i18n' // 导入vue-i18n
 import messages from './i18n' // 引入自定义国际化内容
 import 'view-design/dist/styles/iview.css' // 按需引入iView UI的样式

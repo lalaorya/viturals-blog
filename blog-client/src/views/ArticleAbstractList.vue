@@ -31,6 +31,7 @@
       <div class="article-abstract-page-container">
         <iv-page
           class-name="article-abstract-pagination"
+          v-if="pagination.total"
           :total="pagination.total"
           :current="pagination.currentPage"
           :pageSize="pagination.pageSize"
@@ -39,7 +40,9 @@
           
         </iv-page>
       </div>
+      <site-footer id="site-footer"></site-footer>
     </div>
+    
   </content-box>
 </template>
 
@@ -47,6 +50,7 @@
 import ContentBox from "components/content/ContentBox";
 import TagWall from "components/content/TagWall";
 import ArticleInfo from "components/content/ArticleInfo";
+import SiteFooter from 'components/content/SiteFooter'
 
 export default {
   name: "ArticleAbstractList",
@@ -54,136 +58,20 @@ export default {
     "content-box": ContentBox,
     "tag-wall": TagWall,
     "article-info": ArticleInfo,
+    'site-footer': SiteFooter
   },
   data() {
     return {
       pagination: {
         // 总文章数目
-        total: 200,
+        total: 0,
         currentPage: 1,
-        // 每页5条记录
-        pageSize: 6,
+        // 每页5条记录s
+        pageSize: 10,
       },
 
       articleAbstractList:[],
-      // articleAbstractList: [
-      //   {
-      //     id: 0,
-      //     top: 1,
-      //     tags: [
-      //       { id: 0, name: "Java" },
-      //       { id: 1, name: "RabbitMQ" },
-      //       { id: 2, name: "ElasticSearch" },
-      //       { id: 3, name: "Vue" },
-      //     ],
-      //     title: "Spring Batch异常处理",
-      //     summary: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 1,
-      //     top: 1,
-      //     tagList: [
-      //       { id: 0, name: "Linux" },
-      //       { id: 1, name: "SpringBoot" },
-      //       { id: 2, name: "SpringCloud" },
-      //       { id: 3, name: "Nuxt.js" },
-      //     ],
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 2,
-      //     title: "Spring Batch异常处理",
-      //     tagList: [
-      //       { id: 0, name: "Java" },
-      //       { id: 1, name: "RabbitMQ" },
-      //       { id: 2, name: "ElasticSearch" },
-      //       { id: 3, name: "Vue" },
-      //     ],
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 3,
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 4,
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 5,
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 6,
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      //   {
-      //     id: 7,
-      //     title: "Spring Batch异常处理",
-      //     description: `Spring Batch处理任务过程中如果发生了异常，默认机制是马上停止任务执行，抛出相应异常，
-      //     如果任务还包含未执行的步骤也不会被执行。要改变这个默认规则，我们可以配置异常重试和异常跳过机制。
-      //     异常跳过：遇到异常的时候不希望结束任务，而是跳过这个异常，继续执行；异常重试：遇到异常的时候经过指定次数的重试，
-      //     如果还是失败的话，才会停止任务。除了这两个特性外，本文也会记录一些别的特性。`,
-      //     createTime: "2020-03-12",
-      //     updateTime: "2020-03-12",
-      //     readNum: 10002,
-      //     likeNum: 1004,
-      //   },
-      // ],
+     
     };
   },
   created() {
@@ -208,7 +96,6 @@ export default {
       // 发送Ajax请求，提交分页相关参数
       console.log(param);
        this.$axios.post("blog/page",param).then(res => {
-        console.log("------------")
         console.log(res.data.data)
         // _this.blogcount = res.data.data;
         _this.articleAbstractList=res.data.data.records;

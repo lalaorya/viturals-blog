@@ -10,7 +10,28 @@ const addStylusResource = rule => {
     })
 }
 
+// 导入compression-webpack-plugin
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+// 定义压缩文件类型
+const productionGzipExtensions = ['js', 'css']
+
 module.exports = {
+
+  configureWebpack: {
+    plugins: [
+      new CompressionWebpackPlugin({
+        filename: '[path].gz[query]',
+        algorithm: 'gzip',
+        // test: new RegExp('\\.(' + 
+        // productionGzipExtensions.join('|') + ')$'),
+        test:  /\.(js|css)$/,
+        threshold: 10240,
+        minRatio: 0.8
+      })
+    ]
+  },
+
+  
   publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : '/', // 默认'/'，部署应用包时的基本 URL
   outputDir: 'dist', // 默认值,生产环境构建文件的目录
   assetsDir: '', // 默认值,放置生成的静态资源(js、css、img、fonts)的(相对于outputDir的)目录
@@ -28,7 +49,7 @@ module.exports = {
     proxy: {
       // 例如将'http://localhost:8080/api/xxx'代理到'https://localhost:8082/api/xxx'
       '/api': {
-        target: 'http://localhost:8082', // 目标代理接口地址
+        target: 'http://localhost:8083', // 目标代理接口地址
         secure: false, // 忽略https安全提示(如果是https接口，需要配置这个参数)
         changeOrigin: true, // 本地会虚拟一个服务器接收请求并代发该请求
         ws: true, // 启用websockets
@@ -64,3 +85,4 @@ module.exports = {
     )
   }
 }
+

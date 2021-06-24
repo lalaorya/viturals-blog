@@ -1,4 +1,5 @@
 import Index from 'components/content/index/Index'
+import { Footer } from 'view-design'
 
 // 公共区域(懒加载)
 const HomeSideBar = () => import('views/HomeSideBar')
@@ -64,7 +65,7 @@ export default [
         path: '/article/:id',
         name: 'article',
         components: {
-          sideBar: ArticleSideBar,
+          // sideBar: ArticleSideBar,
           content: ArticleContent
         },
         meta: {

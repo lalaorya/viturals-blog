@@ -3,7 +3,7 @@
     <mobile-side-bar id="mobile-side-bar"></mobile-side-bar>
     <div id="side-bar-footer">
       <desk-side-bar id="desk-side-bar"></desk-side-bar>
-      <site-footer id="site-footer"></site-footer>
+      <!-- <site-footer id="site-footer"></site-footer> -->
     </div>
   </div>
 </template>
@@ -11,14 +11,14 @@
 <script type="text/ecmascript-6">
 import MobileSideBar from 'components/content/Nav/MobileSideBar'
 import DeskSideBar from 'components/content/Nav/DeskSideBar'
-import SiteFooter from 'components/content/SiteFooter'
+// import SiteFooter from 'components/content/SiteFooter'
 
 export default {
   name: 'HomeSideBar',
   components: {
     'mobile-side-bar': MobileSideBar,
     'desk-side-bar': DeskSideBar,
-    'site-footer': SiteFooter
+    // 'site-footer': SiteFooter
   },
   data () {
     return {

@@ -1,5 +1,7 @@
 <template>
   <div class="main-wrapper">
+    <!-- TODO
+    设置按钮控制侧边栏的出现 -->
     <router-view name="sideBar"></router-view>
     <router-view name="content"></router-view>
   </div>

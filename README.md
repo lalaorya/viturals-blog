@@ -17,10 +17,8 @@
 
 ## 项目预览
 
-- 前台：http://47.119.115.60/
-- 后台：http://47.119.115.60/admin  账号：admin 密码：admin
-
-域名尚未备案，目前只能用公网IP访问
+- 前台：https://jsdi.top
+- 后台：https://jsdi.top/admin  账号：admin 密码：admin
 
 ## 技术栈
 
@@ -92,14 +90,21 @@
 
   ![image-20210414203001704](https://i.loli.net/2021/04/14/2iy1rkacFSRHt7d.png)
 
-## 尚未完成的功能
+## TODO
 
-- 博客分类、动态以及友链页面的开发
-- 博客和后台管理系统搜索功能，使用Elastic Search实现
+- [ ] 博客分类、动态以及友链页面的开发
 
-## 需要完善的地方
+- [ ] 博客和后台管理系统搜索功能，使用Elastic Search实现
 
-- 使用`hibernate validator`对后端接口进行参数校验
+- [x] 首屏访问时间过慢，待优化
+- [ ] 使用`hibernate validator`对后端接口进行参数校验
+- [x] 后台架构的优化(有些controller中业务代码太多)
+- [x] 升级HTTPS，提高站点安全性
 
-- 前端对用户名、密码以及JWT的加密
-- 后台架构的优化(有些controller中业务代码太多)
+## 最近更新~
+
+*2021.06.10 ~ 2021.06.15*
+
+- 域名配置和前端CDN加速
+- 从HTTP升级到了HTTPS
+- 前端和后端分别配置Gzip压缩，缩小部分css、js文件的体积，优化首屏访问时间
